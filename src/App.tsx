@@ -1,3 +1,5 @@
+import { SortableColumn } from './components/SortableColumn/SortableColumn';
+
 export function App() {
-  return <h1>Hello World!</h1>;
+  return <SortableColumn />;
 }
