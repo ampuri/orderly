@@ -1,6 +1,3 @@
-import styles from './SortableColumn.module.css';
-import { useState } from 'react';
-import { SortableCard } from '../SortableCard/SortableCard';
 import {
   DndContext,
   closestCenter,
@@ -10,6 +7,7 @@ import {
   useSensors,
   type DragEndEvent,
   DragOverlay,
+  type DragStartEvent,
 } from '@dnd-kit/core';
 import {
   arrayMove,
@@ -17,8 +15,13 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { useState } from 'react';
+
+import { SortableCard } from '../SortableCard/SortableCard';
+import { SortableCardPresentational } from '../SortableCard/SortableCardPresentational';
 
 export function SortableColumn() {
+  const [activeId, setActiveId] = useState<string | null>(null);
   const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -27,6 +30,9 @@ export function SortableColumn() {
     })
   );
 
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id.toString());
+  };
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active && active.id !== over.id) {
@@ -37,12 +43,14 @@ export function SortableColumn() {
         return arrayMove(items, oldIndex, newIndex);
       });
     }
+    setActiveId(null);
   };
 
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
@@ -50,7 +58,9 @@ export function SortableColumn() {
           <SortableCard key={id} id={id} />
         ))}
       </SortableContext>
-      <DragOverlay></DragOverlay>
+      <DragOverlay>
+        {activeId ? <SortableCardPresentational /> : null}
+      </DragOverlay>
     </DndContext>
   );
 }
