@@ -1,0 +1,33 @@
+[
+  {
+    "day": 1,
+    "question": "$$distance$$ from the $$center$$ of the $$earth$$",
+    "alsoAccepts": {
+      "distance": ["depth"],
+      "center": ["core", "crust"]
+    },
+    "intendedOrder": [
+      "the andromeda galaxy",
+      "the sun",
+      "the international space station",
+      "an airplane in flight",
+      "the louvre",
+      "the mariana trench"
+    ]
+  },
+  {
+    "day": 2,
+    "question": "$$likeliness$$ to $$kill$$ you in an $$attack$$",
+    "alsoAccepts": {
+      "likeliness": ["likelihood"]
+    },
+    "intendedOrder": [
+      "the heat death of the universe",
+      "a nuclear warhead",
+      "a bear",
+      "an average human",
+      "a baby",
+      "phytoplankton"
+    ]
+  }
+]

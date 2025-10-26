@@ -21,11 +21,10 @@ export type ColumnData = {
   hint: 'correct' | 'up' | 'down' | undefined;
 }[];
 
-type RawDailyRiddleData = {
+export type RawDailyRiddleData = {
   day: number;
   question: string;
   alsoAccepts: Record<string, string[]>;
-  startingOrder: string[];
   intendedOrder: string[];
   highestText?: string;
   lowestText?: string;
@@ -74,11 +73,22 @@ function getNumKeywords(question: string): number {
     .filter(part => part.startsWith('$$') && part.endsWith('$$')).length;
 }
 
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
-  const transformedStartingOrder = dailyRiddleData.startingOrder.map(text => ({
-    text,
-    hint: undefined,
-  }));
+  const transformedStartingOrder: ColumnData = shuffleArray(
+    dailyRiddleData.intendedOrder.map(text => ({
+      text,
+      hint: undefined,
+    }))
+  );
   const transformedIntendedOrder = dailyRiddleData.intendedOrder.map(text => ({
     text,
     hint: undefined,

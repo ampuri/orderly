@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { useGameContext } from '../../context/GameContext';
+import { useCountdown } from '../../hooks/useCountdown';
 import { useInstructionsModal } from '../Modal/InstructionsModal';
 
 import styles from './Header.module.css';
@@ -9,9 +10,14 @@ export function Header() {
   const [giveUpConfirmation, setGiveUpConfirmation] = useState(0);
   const { giveUp } = useGameContext();
   const showInstructionsModal = useInstructionsModal();
+  const countdown = useCountdown();
+
   return (
     <header className={styles.header}>
-      <div className={styles.title}>Orderly</div>
+      <div className={styles.titleContainer}>
+        <div className={styles.title}>Orderly</div>
+        <div className={styles.countdownChip}>{countdown}</div>
+      </div>
       <div className={styles.buttonsContainer}>
         <button
           className={styles.button}

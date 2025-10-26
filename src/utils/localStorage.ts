@@ -60,3 +60,14 @@ export function readFromLocalStorage(gameDay: number): GameState | undefined {
   const allData = readAllData();
   return allData[gameDay];
 }
+
+/**
+ * Clears all orderly data from localStorage
+ */
+export function clearAllLocalStorage(): void {
+  try {
+    localStorage.removeItem(ORDERLY_KEY);
+  } catch (error) {
+    console.error('Error clearing localStorage:', error);
+  }
+}

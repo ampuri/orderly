@@ -7,10 +7,29 @@
   justify-content: space-between;
 }
 
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
 .title {
   font-size: 1.5rem;
   font-weight: bold;
   text-transform: uppercase;
+}
+
+.countdownChip {
+  background-color: #e8e1d3;
+  border: 2px solid #544e46;
+  border-radius: 12px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .buttonsContainer {
