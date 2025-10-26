@@ -1,4 +1,6 @@
+import styles from './App.module.css';
 import { GameColumns } from './components/GameColumns/GameColumns';
+import { GameStatus } from './components/GameStatus/GameStatus';
 import { Question } from './components/Question/Question';
 import { GameProvider, type ColumnData } from './context/GameContext';
 
@@ -32,8 +34,11 @@ export function App() {
 
   return (
     <GameProvider dailyRiddleData={dailyRiddleData}>
-      <Question />
-      <GameColumns />
+      <div className={styles.container}>
+        <Question />
+        <GameColumns />
+        <GameStatus />
+      </div>
     </GameProvider>
   );
 }

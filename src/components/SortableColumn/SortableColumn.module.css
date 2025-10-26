@@ -6,6 +6,10 @@
     padding: 4px;
   }
 
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
   border-radius: 6px;
   background-color: #fffaf0;
 }
@@ -17,4 +21,11 @@
   @media (max-width: 768px) {
     gap: 4px;
   }
+}
+
+.labelText {
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 0.8em;
 }

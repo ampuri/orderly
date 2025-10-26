@@ -20,7 +20,7 @@ import {
 import { useState } from 'react';
 
 import type { ColumnData } from '../../context/GameContext';
-import { useGameContext } from '../../context/GameContext';
+import { useGameContext, useGameOptions } from '../../context/GameContext';
 import { SortableCard } from '../SortableCard/SortableCard';
 import { SortableCardPresentational } from '../SortableCard/SortableCardPresentational';
 
@@ -37,6 +37,7 @@ export function SortableColumn({
   const [activeId, setActiveId] = useState<string | null>(null);
   const [items, setItems] = useState<ColumnData>(initialData);
   const { setCurrentGuess } = useGameContext();
+  const { highestText, lowestText } = useGameOptions();
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -77,6 +78,7 @@ export function SortableColumn({
           className={styles.container}
           style={disableAndShowHints ? { opacity: 0.5 } : undefined}
         >
+          <div className={styles.labelText}>{highestText}</div>
           <div className={styles.boundingBox}>
             {items.map(item => (
               <SortableCard
@@ -88,6 +90,7 @@ export function SortableColumn({
               />
             ))}
           </div>
+          <div className={styles.labelText}>{lowestText}</div>
         </div>
       </SortableContext>
       <DragOverlay>
