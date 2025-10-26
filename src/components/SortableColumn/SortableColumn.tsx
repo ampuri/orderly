@@ -27,9 +27,12 @@ import styles from './SortableColumn.module.css';
 export function SortableColumn() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [items, setItems] = useState([
-    'Item 1',
-    'Item 2 This is very long and probably spans more than one line',
-    'Item 3',
+    'a globe',
+    'the international space station',
+    'ice cream',
+    'the louvre heist',
+    'sleeping through your alarm',
+    'league of legends',
   ]);
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -59,9 +62,11 @@ export function SortableColumn() {
     >
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
         <div className={styles.container}>
-          {items.map(id => (
-            <SortableCard key={id} id={id} hidden={activeId === id} />
-          ))}
+          <div className={styles.boundingBox}>
+            {items.map(id => (
+              <SortableCard key={id} id={id} hidden={activeId === id} />
+            ))}
+          </div>
         </div>
       </SortableContext>
       <DragOverlay>

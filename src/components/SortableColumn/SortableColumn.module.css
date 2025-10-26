@@ -1,9 +1,17 @@
 .container {
-  margin: 10px;
-  border: 1px solid #000;
-  background-color: #f0f0f0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
+  width: 13vw;
   padding: 10px;
+  @media (max-width: 768px) {
+    width: 19vw;
+    padding: 4px;
+  }
+
+  border-radius: 6px;
+  background-color: #fffaf0;
+}
+
+.boundingBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

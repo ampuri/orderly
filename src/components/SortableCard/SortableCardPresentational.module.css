@@ -1,13 +1,29 @@
 .card {
-  cursor: grab;
-  width: max(200px, 12vw);
+  width: 100%;
+  min-height: 50px;
+  height: 9vh;
   padding: 10px;
-  border: 1px solid #000;
-  background-color: #aaaaaa;
+  border-radius: 6px;
+  background-color: #e8e1d3;
 
-  touch-action: none;
   font-family: 'Trebuchet MS', sans-serif;
   font-weight: bold;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  text-align: center;
 
+  box-sizing: border-box;
   display: flex;
+  align-items: center;
+  justify-content: center;
+
+  touch-action: none;
+  cursor: grab;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.card:hover {
+  background-color: #ccc0ad;
 }
