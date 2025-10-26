@@ -25,18 +25,12 @@ import { SortableCardPresentational } from '../SortableCard/SortableCardPresenta
 import styles from './SortableColumn.module.css';
 
 type SortableColumnProps = {
+  data: string[];
   disabled?: boolean;
 };
-export function SortableColumn({ disabled }: SortableColumnProps) {
+export function SortableColumn({ data, disabled }: SortableColumnProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [items, setItems] = useState([
-    'a globe',
-    'the international space station',
-    'ice cream',
-    'the louvre heist',
-    'sleeping through your alarm',
-    'league of legends',
-  ]);
+  const [items, setItems] = useState(data);
   const sensors = useSensors(useSensor(PointerSensor));
 
   const handleDragStart = (event: DragStartEvent) => {

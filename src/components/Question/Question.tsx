@@ -1,14 +1,21 @@
+import { useGameQuestion } from '../../context/GameContext';
 import { AnswerTextInput } from '../AnswerTextInput/AnswerTextInput';
 
 import styles from './Question.module.css';
 
 export function Question() {
+  const question = useGameQuestion();
   return (
     <div className={styles.container}>
-      Hello <AnswerTextInput answer="world" /> the quick brown{' '}
-      <AnswerTextInput answer="fox" /> jumps over the lazy{' '}
-      <AnswerTextInput answer="dog" /> here is a long word{' '}
-      <AnswerTextInput answer="pterodactyl" />
+      {question.map(segment => (
+        <span key={segment.text}>
+          {segment.isKeyword ? (
+            <AnswerTextInput answer={segment.text} />
+          ) : (
+            segment.text
+          )}
+        </span>
+      ))}
     </div>
   );
 }
