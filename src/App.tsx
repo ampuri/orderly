@@ -1,6 +1,7 @@
 import styles from './App.module.css';
 import { GameColumns } from './components/GameColumns/GameColumns';
 import { GameStatus } from './components/GameStatus/GameStatus';
+import { Header } from './components/Header/Header';
 import { ModalRenderer } from './components/Modal/ModalRenderer';
 import { Question } from './components/Question/Question';
 import { GameProvider, type ColumnData } from './context/GameContext';
@@ -37,6 +38,7 @@ export function App() {
   return (
     <ModalProvider>
       <GameProvider dailyRiddleData={dailyRiddleData}>
+        <Header />
         <div className={styles.container}>
           <Question />
           <GameColumns />

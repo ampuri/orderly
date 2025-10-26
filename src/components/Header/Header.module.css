@@ -1,0 +1,56 @@
+.header {
+  border-bottom: 1px solid #aaa;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.button {
+  all: unset;
+  background-color: #e8e1d3;
+  border: 2px solid #544e46;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #ccc0ad;
+}
+
+.button:active {
+  background-color: #e8e1d3;
+}
+
+.giveUpContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  position: relative;
+}
+
+.giveUpConfirmationText {
+  position: absolute;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  top: -1rem;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}

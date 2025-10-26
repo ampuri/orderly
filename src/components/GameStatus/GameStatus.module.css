@@ -50,11 +50,9 @@
   -ms-user-select: none;
 }
 
-.giveUpContainer {
+.buttonsContainer {
   display: flex;
-  text-transform: uppercase;
-  font-weight: bold;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: center;
+  flex-direction: row;
+  gap: 1rem;
+  margin-top: 1rem;
 }
