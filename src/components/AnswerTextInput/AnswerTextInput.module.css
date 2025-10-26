@@ -14,6 +14,10 @@
   border: 2px solid #544e46;
 }
 
+.inputIncorrect {
+  border-color: #eb3434;
+}
+
 .button {
   all: unset;
   display: inline-flex;

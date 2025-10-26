@@ -47,3 +47,31 @@
   justify-content: center;
   background-color: #e8e1d3;
 }
+
+.relativeContainer {
+  position: relative;
+}
+
+.cardHintUp {
+  background-color: #84becf;
+}
+
+.cardHintDown {
+  background-color: #84becf;
+}
+
+.cardHintCorrect {
+  background-color: #88f78e;
+}
+
+.hintUp {
+  background-color: #84becf;
+}
+
+.hintDown {
+  background-color: #84becf;
+}
+
+.hintCorrect {
+  background-color: #88f78e;
+}

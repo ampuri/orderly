@@ -75,8 +75,10 @@ export function SortableColumn({
         strategy={verticalListSortingStrategy}
       >
         <div
-          className={styles.container}
-          style={disableAndShowHints ? { opacity: 0.5 } : undefined}
+          className={[
+            styles.container,
+            disableAndShowHints && styles.containerDisabled,
+          ].join(' ')}
         >
           <div className={styles.labelText}>{highestText}</div>
           <div className={styles.boundingBox}>
@@ -97,7 +99,7 @@ export function SortableColumn({
         {activeId ? (
           <SortableCardPresentational
             text={activeId}
-            style={{ cursor: 'grabbing' }}
+            className={styles.dragOverlay}
           />
         ) : null}
       </DragOverlay>

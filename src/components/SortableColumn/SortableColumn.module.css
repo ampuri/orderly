@@ -29,3 +29,11 @@
   text-align: center;
   font-size: 0.8em;
 }
+
+.containerDisabled {
+  opacity: 0.5;
+}
+
+.dragOverlay {
+  cursor: grabbing;
+}

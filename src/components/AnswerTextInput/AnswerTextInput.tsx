@@ -38,7 +38,10 @@ export function AnswerTextInput({ answer }: AnswerTextInputProps) {
         <>
           {displayedLetters}
           <input
-            className={styles.input}
+            className={[
+              styles.input,
+              answerState === 'incorrect' && styles.inputIncorrect,
+            ].join(' ')}
             type="text"
             value={inputValue}
             onChange={e => {
@@ -47,7 +50,6 @@ export function AnswerTextInput({ answer }: AnswerTextInputProps) {
             }}
             style={{
               width: `${(answer.length - LETTERS_TO_DISPLAY) * 1.1}em`,
-              borderColor: answerState === 'incorrect' ? '#eb3434' : undefined,
             }}
             onKeyDown={e => {
               if (e.key === 'Enter') {
