@@ -1,5 +1,6 @@
 .container {
   display: flex;
   flex-direction: row;
-  gap: 4px;
+
+  transition: width 0.5s ease-out;
 }

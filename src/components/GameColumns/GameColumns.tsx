@@ -8,13 +8,14 @@ export function GameColumns() {
     gameState: { guesses, currentGuess },
   } = useGameContext();
   return (
-    <div>
-      <div className={styles.container}>
-        {guesses.map((guess, index) => (
-          <SortableColumn key={index} initialData={guess} disableAndShowHints />
-        ))}
-        <SortableColumn initialData={currentGuess} />
-      </div>
+    <div
+      className={styles.container}
+      style={{ width: `${(guesses.length + 1) * 13}vw` }}
+    >
+      {guesses.map((guess, index) => (
+        <SortableColumn key={index} initialData={guess} disableAndShowHints />
+      ))}
+      <SortableColumn initialData={currentGuess} />
     </div>
   );
 }
