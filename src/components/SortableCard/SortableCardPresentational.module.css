@@ -2,13 +2,16 @@
   width: 100%;
   min-height: 50px;
   height: 9vh;
-  padding: 10px;
   border-radius: 6px;
   background-color: #e8e1d3;
+  padding: 10px;
+  @media (max-width: 768px) {
+    padding: 4px;
+  }
 
-  font-family: 'Trebuchet MS', sans-serif;
   font-weight: bold;
   text-wrap: pretty;
+  text-transform: uppercase;
   overflow-wrap: anywhere;
   text-align: center;
 

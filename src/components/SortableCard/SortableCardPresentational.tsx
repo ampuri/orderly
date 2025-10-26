@@ -13,7 +13,7 @@ export function SortableCardPresentational({
 }: SortableCardPresentationalProps) {
   return (
     <div className={styles.card} ref={ref} {...props}>
-      {text.toUpperCase()}
+      {text}
     </div>
   );
 }

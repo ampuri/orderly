@@ -1,0 +1,32 @@
+.container {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #ccc0ad;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.input {
+  all: unset;
+  display: inline-block;
+  background-color: #e3d7c5;
+  border: 2px solid #544e46;
+}
+
+.button {
+  all: unset;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 2px;
+}
+
+.button:hover {
+  transform: scale(1.05);
+}
+
+.button:active {
+  transform: scale(0.95);
+}
