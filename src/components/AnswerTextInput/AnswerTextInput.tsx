@@ -1,11 +1,10 @@
-import { XCircle, ArrowRightCircle } from 'lucide-react';
 import { useState } from 'react';
 
 import { useGameContext } from '../../context/GameContext';
 
 import styles from './AnswerTextInput.module.css';
 
-const LETTERS_TO_DISPLAY = 1 as const;
+const LETTERS_TO_DISPLAY = 0 as const;
 
 type AnswerTextInputProps = {
   answer: string;
@@ -25,12 +24,7 @@ export function AnswerTextInput({ answer, alsoAccepts }: AnswerTextInputProps) {
     'pending'
   );
 
-  const handleButtonClick = () => {
-    if (answerState === 'incorrect') {
-      setInputValue('');
-      setAnswerState('pending');
-      return;
-    }
+  const handleCheckButtonClick = () => {
     const isMatch =
       inputValue.toLowerCase() === expectedInputValue.toLowerCase();
     const isAlsoAccepted = alsoAccepts?.some(
@@ -70,20 +64,16 @@ export function AnswerTextInput({ answer, alsoAccepts }: AnswerTextInputProps) {
             }}
             onKeyDown={e => {
               if (e.key === 'Enter') {
-                handleButtonClick();
+                handleCheckButtonClick();
               }
             }}
           />
           <button
             className={styles.button}
-            onClick={handleButtonClick}
+            onClick={handleCheckButtonClick}
             disabled={specialState === 'win' || specialState === 'lose'}
           >
-            {answerState === 'incorrect' ? (
-              <XCircle size="1em" />
-            ) : (
-              <ArrowRightCircle size="1em" />
-            )}
+            CHECK
           </button>
         </>
       )}

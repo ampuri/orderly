@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import styles from './App.module.css';
 import { GameColumns } from './components/GameColumns/GameColumns';
 import { GameStatus } from './components/GameStatus/GameStatus';
@@ -13,21 +11,10 @@ import { clearAllLocalStorage } from './utils/localStorage';
 import { getCurrentPuzzleDay } from './utils/puzzleDay';
 
 export function App() {
-  // Check for reset query param
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('reset') === 'true') {
-      clearAllLocalStorage();
-      // Remove the reset param from URL
-      urlParams.delete('reset');
-      const newUrl =
-        window.location.pathname +
-        (urlParams.toString() ? '?' + urlParams.toString() : '');
-      window.history.replaceState({}, '', newUrl);
-      // Reload to apply the reset
-      window.location.reload();
-    }
-  }, []);
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('reset') === 'true') {
+    clearAllLocalStorage();
+  }
 
   const currentDay = getCurrentPuzzleDay();
   const dailyRiddleData = puzzles.find(puzzle => puzzle.day === currentDay) as

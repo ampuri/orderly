@@ -23,8 +23,8 @@ export function useInstructionsModal() {
             <br />
             After ordering the cards, you can click{' '}
             <strong>CHECK RANKING</strong> to see which cards are in the correct
-            position. You will also get a hint on if a given card needs to go up
-            ⬆️ or down ⬇️.
+            position. You will also get <strong>one hint</strong> (per check) on
+            if a given card needs to go up ⬆️ or down ⬇️.
             <br />
             <br />
             You can guess words in the criteria at any time, and there are{' '}

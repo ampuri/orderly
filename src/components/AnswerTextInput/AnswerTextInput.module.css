@@ -27,6 +27,11 @@
   border-color: #eb3434;
 }
 
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .button {
   all: unset;
   display: inline-flex;
@@ -34,6 +39,16 @@
   align-items: center;
   cursor: pointer;
   margin-left: 2px;
+
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  background-color: #e8e1d3;
+  border: 2px solid #544e46;
+
+  width: 5em;
+  height: 3em;
 }
 
 .button:disabled {
