@@ -30,3 +30,20 @@
 .card:hover {
   background-color: #ccc0ad;
 }
+
+.cardDisabled {
+  pointer-events: none;
+}
+
+.hint {
+  position: absolute;
+  top: -0.3em;
+  right: -0.3em;
+  border-radius: 2em;
+  width: 1.8em;
+  height: 1.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e8e1d3;
+}

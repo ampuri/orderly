@@ -24,7 +24,10 @@ import { SortableCardPresentational } from '../SortableCard/SortableCardPresenta
 
 import styles from './SortableColumn.module.css';
 
-export function SortableColumn() {
+type SortableColumnProps = {
+  disabled?: boolean;
+};
+export function SortableColumn({ disabled }: SortableColumnProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [items, setItems] = useState([
     'a globe',
@@ -61,10 +64,18 @@ export function SortableColumn() {
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        <div className={styles.container}>
+        <div
+          className={styles.container}
+          style={disabled ? { opacity: 0.7 } : undefined}
+        >
           <div className={styles.boundingBox}>
             {items.map(id => (
-              <SortableCard key={id} id={id} hidden={activeId === id} />
+              <SortableCard
+                key={id}
+                id={id}
+                hidden={activeId === id}
+                disabled={disabled}
+              />
             ))}
           </div>
         </div>

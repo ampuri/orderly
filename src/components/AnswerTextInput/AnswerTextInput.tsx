@@ -46,7 +46,7 @@ export function AnswerTextInput({ answer }: AnswerTextInputProps) {
               setInputValue(e.target.value);
             }}
             style={{
-              width: `${answer.length - LETTERS_TO_DISPLAY}em`,
+              width: `${(answer.length - LETTERS_TO_DISPLAY) * 1.1}em`,
               borderColor: answerState === 'incorrect' ? '#eb3434' : undefined,
             }}
             onKeyDown={e => {
