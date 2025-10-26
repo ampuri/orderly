@@ -1,10 +1,20 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from 'react';
 
 import { useLoseModal } from '../components/Modal/LoseModal';
 import { useSolvedRankingModal } from '../components/Modal/SolvedRankingModal';
 import { useSolvedWordsModal } from '../components/Modal/SolvedWordsModal';
 import { useWinModal } from '../components/Modal/WinModal';
 import { NUM_GUESSES } from '../constants';
+import {
+  updateLocalStorage,
+  readFromLocalStorage,
+} from '../utils/localStorage';
 
 export type ColumnData = {
   text: string;
@@ -12,6 +22,7 @@ export type ColumnData = {
 }[];
 
 type RawDailyRiddleData = {
+  day: number;
   question: string;
   alsoAccepts: Record<string, string[]>;
   startingOrder: string[];
@@ -21,6 +32,7 @@ type RawDailyRiddleData = {
 };
 
 type TransformedDailyRiddleData = {
+  day: number;
   question: string;
   alsoAccepts: Record<string, string[]>;
   startingOrder: ColumnData;
@@ -29,7 +41,7 @@ type TransformedDailyRiddleData = {
   lowestText?: string;
 };
 
-type GameState = {
+export type GameState = {
   currentGuess: ColumnData;
   guesses: ColumnData[];
   solvedWords: string[];
@@ -74,18 +86,61 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
 
   const showSolvedWordsModal = useSolvedWordsModal();
   const showSolvedRankingModal = useSolvedRankingModal();
-  const [specialState, setSpecialState] =
-    useState<GameState['specialState']>(undefined);
+
+  // Load from localStorage on mount
+  const savedState = readFromLocalStorage(dailyRiddleData.day);
+
+  const [specialState, setSpecialState] = useState<GameState['specialState']>(
+    savedState?.specialState ?? undefined
+  );
 
   const numKeywords = getNumKeywords(dailyRiddleData.question);
-  const [guesses, setGuesses] = useState<ColumnData[]>([]);
-  const [currentGuess, setCurrentGuess] = useState<ColumnData>(
-    transformedStartingOrder
+  const [guesses, setGuesses] = useState<ColumnData[]>(
+    savedState?.guesses ?? []
   );
-  const [solvedWords, setSolvedWords] = useState<string[]>([]);
+  const [currentGuess, setCurrentGuess] = useState<ColumnData>(
+    savedState?.currentGuess ?? transformedStartingOrder
+  );
+  const [solvedWords, setSolvedWords] = useState<string[]>(
+    savedState?.solvedWords ?? []
+  );
 
   const showWinModal = useWinModal();
   const showLoseModal = useLoseModal();
+
+  // Show win/lose modal if game was already finished
+  useEffect(() => {
+    if (savedState?.specialState === 'win') {
+      showWinModal(
+        generateShareableContent(
+          dailyRiddleData.question,
+          savedState.solvedWords,
+          savedState.guesses
+        )
+      );
+    } else if (savedState?.specialState === 'lose') {
+      showLoseModal(
+        generateShareableContent(
+          dailyRiddleData.question,
+          savedState.solvedWords,
+          savedState.guesses
+        ),
+        generateSolution(dailyRiddleData.question, transformedIntendedOrder)
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
+
+  // Persist state changes to localStorage
+  useEffect(() => {
+    const gameState: GameState = {
+      currentGuess,
+      guesses,
+      solvedWords,
+      specialState,
+    };
+    updateLocalStorage(dailyRiddleData.day, gameState);
+  }, [currentGuess, guesses, solvedWords, specialState, dailyRiddleData.day]);
 
   const addSolvedWord = (word: string) => {
     const newSolvedWords = [...solvedWords, word];

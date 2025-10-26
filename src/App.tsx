@@ -10,6 +10,7 @@ import { ModalProvider } from './context/ModalContext';
 export function App() {
   // Mock one for now
   const dailyRiddleData = {
+    day: 1,
     question: '$$distance$$ from the $$center$$ of the $$earth$$',
     alsoAccepts: {
       distance: [

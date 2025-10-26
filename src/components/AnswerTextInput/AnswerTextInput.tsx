@@ -32,10 +32,11 @@ export function AnswerTextInput({ answer, alsoAccepts }: AnswerTextInputProps) {
       return;
     }
     const isMatch =
-      inputValue.toLowerCase() !== expectedInputValue.toLowerCase();
+      inputValue.toLowerCase() === expectedInputValue.toLowerCase();
     const isAlsoAccepted = alsoAccepts?.some(
       accept => inputValue.toLowerCase() === accept.toLowerCase()
     );
+
     if (isMatch || isAlsoAccepted) {
       addSolvedWord(answer);
       return;
