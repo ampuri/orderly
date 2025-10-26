@@ -44,7 +44,7 @@ export function getTimeUntilNextPuzzle(): number {
   const tomorrow = new Date(
     now.getFullYear(),
     now.getMonth(),
-    now.getDate(),
+    now.getDate() + 1,
     0,
     0,
     0,
