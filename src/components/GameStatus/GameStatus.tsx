@@ -1,5 +1,5 @@
 import { NUM_GUESSES } from '../../constants';
-import { useGameContext } from '../../context/GameContext';
+import { useCanGuessMore, useGameContext } from '../../context/GameContext';
 
 import styles from './GameStatus.module.css';
 
@@ -9,15 +9,23 @@ export function GameStatus() {
     gameState: { guesses },
   } = useGameContext();
   const numGuessesLeft = NUM_GUESSES - guesses.length;
+
+  const canGuessMore = useCanGuessMore();
   return (
     <div className={styles.container}>
       <div className={styles.guessesLeft}>
-        Guesses left:{' '}
+        Checks left:{' '}
         {Array.from({ length: numGuessesLeft }).map((_, index) => (
           <div key={index} className={styles.guessDot} />
         ))}
       </div>
-      <button className={styles.button} onClick={addGuess}>
+      <button
+        className={[styles.button, !canGuessMore && styles.buttonDisabled].join(
+          ' '
+        )}
+        onClick={addGuess}
+        disabled={!canGuessMore}
+      >
         Check Ranking
       </button>
     </div>

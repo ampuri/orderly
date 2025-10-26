@@ -1,6 +1,8 @@
 import { XCircle, ArrowRightCircle } from 'lucide-react';
 import { useState } from 'react';
 
+import { useGameContext } from '../../context/GameContext';
+
 import styles from './AnswerTextInput.module.css';
 
 const LETTERS_TO_DISPLAY = 1 as const;
@@ -10,12 +12,17 @@ type AnswerTextInputProps = {
 };
 
 export function AnswerTextInput({ answer }: AnswerTextInputProps) {
+  const {
+    gameState: { solvedWords },
+    addSolvedWord,
+  } = useGameContext();
+  const isSolved = solvedWords.includes(answer);
   const displayedLetters = answer.slice(0, LETTERS_TO_DISPLAY);
   const expectedInputValue = answer.slice(LETTERS_TO_DISPLAY);
   const [inputValue, setInputValue] = useState('');
-  const [answerState, setAnswerState] = useState<
-    'correct' | 'incorrect' | 'pending'
-  >('pending');
+  const [answerState, setAnswerState] = useState<'incorrect' | 'pending'>(
+    'pending'
+  );
 
   const handleButtonClick = () => {
     if (answerState === 'incorrect') {
@@ -27,12 +34,12 @@ export function AnswerTextInput({ answer }: AnswerTextInputProps) {
       setAnswerState('incorrect');
       return;
     }
-    setAnswerState('correct');
+    addSolvedWord(answer);
   };
 
   return (
     <div className={styles.container}>
-      {answerState === 'correct' ? (
+      {isSolved ? (
         answer
       ) : (
         <>

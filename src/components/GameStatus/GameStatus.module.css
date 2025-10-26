@@ -40,3 +40,12 @@
 .button:active {
   background-color: #e8e1d3;
 }
+
+.buttonDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

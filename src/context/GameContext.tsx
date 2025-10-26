@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
 
+import { NUM_GUESSES } from '../constants';
+
 export type ColumnData = {
   text: string;
   hint: 'correct' | 'up' | 'down' | undefined;
@@ -16,6 +18,7 @@ type DailyRiddleData = {
 type GameState = {
   currentGuess: ColumnData;
   guesses: ColumnData[];
+  solvedWords: string[];
 };
 
 type GameContextType = {
@@ -23,6 +26,7 @@ type GameContextType = {
   gameState: GameState;
   addGuess: () => void;
   setCurrentGuess: React.Dispatch<React.SetStateAction<ColumnData>>;
+  addSolvedWord: (word: string) => void;
 };
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -32,17 +36,47 @@ interface GameProviderProps {
   children: ReactNode;
 }
 
+function guessIsAllCorrect(guess: ColumnData): boolean {
+  return guess.every(item => item.hint === 'correct');
+}
+
 export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
+  const numKeywords = dailyRiddleData.question
+    .split(/(\$\$[^$]+\$\$)/)
+    .filter(part => part.startsWith('$$') && part.endsWith('$$')).length;
   const [guesses, setGuesses] = useState<ColumnData[]>([]);
   const [currentGuess, setCurrentGuess] = useState<ColumnData>(
     dailyRiddleData.startingOrder
   );
+  const [solvedWords, setSolvedWords] = useState<string[]>([]);
+
+  const addSolvedWord = (word: string) => {
+    setSolvedWords(solvedWords => [...solvedWords, word]);
+
+    const solvedAllWords = solvedWords.length + 1 === numKeywords;
+    const hasCorrectGuess =
+      guesses.length > 0 && guessIsAllCorrect(guesses[guesses.length - 1]);
+    if (solvedAllWords && hasCorrectGuess) {
+      console.log('Game solved');
+    } else if (solvedAllWords) {
+      console.log('Solved all words');
+    }
+  };
 
   const addGuess = () => {
-    setGuesses(guesses => [
-      ...guesses,
-      addHintsToGuess(currentGuess, dailyRiddleData.intendedOrder),
-    ]);
+    const guessWithHints = addHintsToGuess(
+      currentGuess,
+      dailyRiddleData.intendedOrder
+    );
+    setGuesses(guesses => [...guesses, guessWithHints]);
+
+    const solvedAllWords = solvedWords.length + 1 === numKeywords;
+    const hasCorrectGuess = guessIsAllCorrect(guessWithHints);
+    if (solvedAllWords && hasCorrectGuess) {
+      console.log('Game solved');
+    } else if (hasCorrectGuess) {
+      console.log('Solved all rankings');
+    }
   };
 
   const contextValue: GameContextType = {
@@ -50,9 +84,11 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
     gameState: {
       guesses,
       currentGuess,
+      solvedWords,
     },
     addGuess,
     setCurrentGuess,
+    addSolvedWord,
   };
 
   return (
@@ -136,4 +172,17 @@ export function useGameQuestion(): QuestionSegment[] {
         isKeyword,
       };
     });
+}
+
+export function useCanGuessMore(): boolean {
+  const context = useGameContext();
+  if (context.gameState.guesses.length === 0) {
+    return true;
+  }
+  if (context.gameState.guesses.length === NUM_GUESSES) {
+    return false;
+  }
+  return !guessIsAllCorrect(
+    context.gameState.guesses[context.gameState.guesses.length - 1]
+  );
 }
