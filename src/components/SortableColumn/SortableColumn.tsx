@@ -19,18 +19,25 @@ import {
 } from '@dnd-kit/sortable';
 import { useState } from 'react';
 
+import type { ColumnData } from '../../context/GameContext';
+import { useGameContext } from '../../context/GameContext';
 import { SortableCard } from '../SortableCard/SortableCard';
 import { SortableCardPresentational } from '../SortableCard/SortableCardPresentational';
 
 import styles from './SortableColumn.module.css';
 
 type SortableColumnProps = {
-  data: string[];
-  disabled?: boolean;
+  initialData: ColumnData;
+  disableAndShowHints?: boolean;
 };
-export function SortableColumn({ data, disabled }: SortableColumnProps) {
+export function SortableColumn({
+  initialData,
+  disableAndShowHints,
+}: SortableColumnProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [items, setItems] = useState(data);
+  const [items, setItems] = useState<ColumnData>(initialData);
+  const { setCurrentGuess } = useGameContext();
+
   const sensors = useSensors(useSensor(PointerSensor));
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -39,12 +46,17 @@ export function SortableColumn({ data, disabled }: SortableColumnProps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active && active.id !== over.id) {
-      setItems(items => {
-        const oldIndex = items.indexOf(active.id.toString());
-        const newIndex = items.indexOf(over.id.toString());
-
+      const newItemSetter = (items: ColumnData) => {
+        const oldIndex = items.findIndex(
+          item => item.text === active.id.toString()
+        );
+        const newIndex = items.findIndex(
+          item => item.text === over.id.toString()
+        );
         return arrayMove(items, oldIndex, newIndex);
-      });
+      };
+      setItems(newItemSetter);
+      setCurrentGuess(newItemSetter);
     }
     setActiveId(null);
   };
@@ -57,18 +69,22 @@ export function SortableColumn({ data, disabled }: SortableColumnProps) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+      <SortableContext
+        items={items.map(item => item.text)}
+        strategy={verticalListSortingStrategy}
+      >
         <div
           className={styles.container}
-          style={disabled ? { opacity: 0.7 } : undefined}
+          style={disableAndShowHints ? { opacity: 0.5 } : undefined}
         >
           <div className={styles.boundingBox}>
-            {items.map(id => (
+            {items.map(item => (
               <SortableCard
-                key={id}
-                id={id}
-                hidden={activeId === id}
-                disabled={disabled}
+                key={item.text}
+                id={item.text}
+                hidden={activeId === item.text}
+                disabled={disableAndShowHints}
+                hint={disableAndShowHints ? item.hint : undefined}
               />
             ))}
           </div>

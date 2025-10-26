@@ -33,23 +33,25 @@ export function SortableCardPresentational({
   ...props
 }: SortableCardPresentationalProps) {
   return (
-    <div style={{ position: 'relative' }} ref={ref} {...props}>
-      <div
-        className={[styles.card, disabled && styles.cardDisabled].join(' ')}
-        style={
-          hint ? { backgroundColor: HINT_DATA_MAP[hint]?.color } : undefined
-        }
-      >
-        {text}
-      </div>
-      {hint && (
+    <div ref={ref} {...props}>
+      <div style={{ position: 'relative' }}>
         <div
-          className={styles.hint}
-          style={{ backgroundColor: HINT_DATA_MAP[hint]?.color }}
+          className={[styles.card, disabled && styles.cardDisabled].join(' ')}
+          style={
+            hint ? { backgroundColor: HINT_DATA_MAP[hint]?.color } : undefined
+          }
         >
-          {HINT_DATA_MAP[hint].icon}
+          {text}
         </div>
-      )}
+        {hint && (
+          <div
+            className={styles.hint}
+            style={{ backgroundColor: HINT_DATA_MAP[hint]?.color }}
+          >
+            {HINT_DATA_MAP[hint].icon}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
