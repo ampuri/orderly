@@ -14,6 +14,15 @@
   border: 2px solid #544e46;
 }
 
+.input:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
 .inputIncorrect {
   border-color: #eb3434;
 }
@@ -25,6 +34,15 @@
   align-items: center;
   cursor: pointer;
   margin-left: 2px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .button:hover {

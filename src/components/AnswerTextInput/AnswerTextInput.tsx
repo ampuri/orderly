@@ -13,7 +13,7 @@ type AnswerTextInputProps = {
 
 export function AnswerTextInput({ answer }: AnswerTextInputProps) {
   const {
-    gameState: { solvedWords },
+    gameState: { solvedWords, specialState },
     addSolvedWord,
   } = useGameContext();
   const isSolved = solvedWords.includes(answer);
@@ -49,6 +49,7 @@ export function AnswerTextInput({ answer }: AnswerTextInputProps) {
               styles.input,
               answerState === 'incorrect' && styles.inputIncorrect,
             ].join(' ')}
+            disabled={specialState === 'win' || specialState === 'lose'}
             type="text"
             value={inputValue}
             onChange={e => {
@@ -64,7 +65,11 @@ export function AnswerTextInput({ answer }: AnswerTextInputProps) {
               }
             }}
           />
-          <button className={styles.button} onClick={handleButtonClick}>
+          <button
+            className={styles.button}
+            onClick={handleButtonClick}
+            disabled={specialState === 'win' || specialState === 'lose'}
+          >
             {answerState === 'incorrect' ? (
               <XCircle size="1em" />
             ) : (

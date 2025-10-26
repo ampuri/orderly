@@ -1,8 +1,10 @@
 import styles from './App.module.css';
 import { GameColumns } from './components/GameColumns/GameColumns';
 import { GameStatus } from './components/GameStatus/GameStatus';
+import { ModalRenderer } from './components/Modal/ModalRenderer';
 import { Question } from './components/Question/Question';
 import { GameProvider, type ColumnData } from './context/GameContext';
+import { ModalProvider } from './context/ModalContext';
 
 function toColumnData(data: string[]): ColumnData {
   return data.map(text => ({ text, hint: undefined }));
@@ -33,12 +35,15 @@ export function App() {
   };
 
   return (
-    <GameProvider dailyRiddleData={dailyRiddleData}>
-      <div className={styles.container}>
-        <Question />
-        <GameColumns />
-        <GameStatus />
-      </div>
-    </GameProvider>
+    <ModalProvider>
+      <GameProvider dailyRiddleData={dailyRiddleData}>
+        <div className={styles.container}>
+          <Question />
+          <GameColumns />
+          <GameStatus />
+        </div>
+        <ModalRenderer />
+      </GameProvider>
+    </ModalProvider>
   );
 }

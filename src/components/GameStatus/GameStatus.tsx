@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { NUM_GUESSES } from '../../constants';
 import { useCanGuessMore, useGameContext } from '../../context/GameContext';
 
@@ -6,9 +8,11 @@ import styles from './GameStatus.module.css';
 export function GameStatus() {
   const {
     addGuess,
+    giveUp,
     gameState: { guesses },
   } = useGameContext();
   const numGuessesLeft = NUM_GUESSES - guesses.length;
+  const [giveUpConfirmation, setGiveUpConfirmation] = useState(0);
 
   const canGuessMore = useCanGuessMore();
   return (
@@ -28,6 +32,35 @@ export function GameStatus() {
       >
         Check Ranking
       </button>
+      <div className={styles.giveUpContainer}>
+        {giveUpConfirmation === 0 && (
+          <button
+            className={styles.button}
+            onClick={() => setGiveUpConfirmation(1)}
+          >
+            Give up
+          </button>
+        )}
+        {giveUpConfirmation === 1 && (
+          <>
+            Are you sure?
+            <button
+              className={styles.button}
+              onClick={() => setGiveUpConfirmation(2)}
+            >
+              Give up
+            </button>
+          </>
+        )}
+        {giveUpConfirmation === 2 && (
+          <>
+            100% sure?
+            <button className={styles.button} onClick={() => giveUp()}>
+              Give up
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }

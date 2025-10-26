@@ -1,5 +1,9 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
 
+import { useLoseModal } from '../components/Modal/LoseModal';
+import { useSolvedRankingModal } from '../components/Modal/SolvedRankingModal';
+import { useSolvedWordsModal } from '../components/Modal/SolvedWordsModal';
+import { useWinModal } from '../components/Modal/WinModal';
 import { NUM_GUESSES } from '../constants';
 
 export type ColumnData = {
@@ -19,6 +23,7 @@ type GameState = {
   currentGuess: ColumnData;
   guesses: ColumnData[];
   solvedWords: string[];
+  specialState: 'win' | 'lose' | undefined;
 };
 
 type GameContextType = {
@@ -27,6 +32,7 @@ type GameContextType = {
   addGuess: () => void;
   setCurrentGuess: React.Dispatch<React.SetStateAction<ColumnData>>;
   addSolvedWord: (word: string) => void;
+  giveUp: () => void;
 };
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -40,26 +46,46 @@ function guessIsAllCorrect(guess: ColumnData): boolean {
   return guess.every(item => item.hint === 'correct');
 }
 
-export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
-  const numKeywords = dailyRiddleData.question
+function getNumKeywords(question: string): number {
+  return question
     .split(/(\$\$[^$]+\$\$)/)
     .filter(part => part.startsWith('$$') && part.endsWith('$$')).length;
+}
+
+export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
+  const showSolvedWordsModal = useSolvedWordsModal();
+  const showSolvedRankingModal = useSolvedRankingModal();
+  const [specialState, setSpecialState] =
+    useState<GameState['specialState']>(undefined);
+
+  const numKeywords = getNumKeywords(dailyRiddleData.question);
   const [guesses, setGuesses] = useState<ColumnData[]>([]);
   const [currentGuess, setCurrentGuess] = useState<ColumnData>(
     dailyRiddleData.startingOrder
   );
   const [solvedWords, setSolvedWords] = useState<string[]>([]);
 
-  const addSolvedWord = (word: string) => {
-    setSolvedWords(solvedWords => [...solvedWords, word]);
+  const showWinModal = useWinModal();
+  const showLoseModal = useLoseModal();
 
-    const solvedAllWords = solvedWords.length + 1 === numKeywords;
+  const addSolvedWord = (word: string) => {
+    const newSolvedWords = [...solvedWords, word];
+    setSolvedWords(newSolvedWords);
+
+    const solvedAllWords = newSolvedWords.length === numKeywords;
     const hasCorrectGuess =
       guesses.length > 0 && guessIsAllCorrect(guesses[guesses.length - 1]);
     if (solvedAllWords && hasCorrectGuess) {
-      console.log('Game solved');
+      showWinModal(
+        generateShareableContent(
+          dailyRiddleData.question,
+          newSolvedWords,
+          guesses
+        )
+      );
+      setSpecialState('win');
     } else if (solvedAllWords) {
-      console.log('Solved all words');
+      showSolvedWordsModal();
     }
   };
 
@@ -68,15 +94,47 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
       currentGuess,
       dailyRiddleData.intendedOrder
     );
-    setGuesses(guesses => [...guesses, guessWithHints]);
+    const newGuesses = [...guesses, guessWithHints];
+    setGuesses(newGuesses);
 
-    const solvedAllWords = solvedWords.length + 1 === numKeywords;
-    const hasCorrectGuess = guessIsAllCorrect(guessWithHints);
+    const hasMoreGuesses = newGuesses.length < NUM_GUESSES;
+    const solvedAllWords = solvedWords.length === numKeywords;
+    const hasCorrectGuess = guessIsAllCorrect(
+      newGuesses[newGuesses.length - 1]
+    );
     if (solvedAllWords && hasCorrectGuess) {
-      console.log('Game solved');
+      showWinModal(
+        generateShareableContent(
+          dailyRiddleData.question,
+          solvedWords,
+          newGuesses
+        )
+      );
+      setSpecialState('win');
     } else if (hasCorrectGuess) {
-      console.log('Solved all rankings');
+      showSolvedRankingModal();
+    } else if (!hasMoreGuesses) {
+      showLoseModal(
+        generateShareableContent(
+          dailyRiddleData.question,
+          solvedWords,
+          newGuesses
+        ),
+        generateSolution(
+          dailyRiddleData.question,
+          dailyRiddleData.intendedOrder
+        )
+      );
+      setSpecialState('lose');
     }
+  };
+
+  const giveUp = () => {
+    showLoseModal(
+      generateShareableContent(dailyRiddleData.question, solvedWords, guesses),
+      generateSolution(dailyRiddleData.question, dailyRiddleData.intendedOrder)
+    );
+    setSpecialState('lose');
   };
 
   const contextValue: GameContextType = {
@@ -85,10 +143,12 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
       guesses,
       currentGuess,
       solvedWords,
+      specialState,
     },
     addGuess,
     setCurrentGuess,
     addSolvedWord,
+    giveUp,
   };
 
   return (
@@ -176,6 +236,12 @@ export function useGameQuestion(): QuestionSegment[] {
 
 export function useCanGuessMore(): boolean {
   const context = useGameContext();
+  if (
+    context.gameState.specialState === 'win' ||
+    context.gameState.specialState === 'lose'
+  ) {
+    return false;
+  }
   if (context.gameState.guesses.length === 0) {
     return true;
   }
@@ -185,4 +251,86 @@ export function useCanGuessMore(): boolean {
   return !guessIsAllCorrect(
     context.gameState.guesses[context.gameState.guesses.length - 1]
   );
+}
+
+function generateSolution(
+  question: string,
+  intendedOrder: ColumnData
+): ReactNode {
+  const questionWithKeywords = question.split(/(\$\$[^$]+\$\$)/).map(part => {
+    if (part.startsWith('$$') && part.endsWith('$$')) {
+      return <strong>{part.replaceAll('$$', '')}</strong>;
+    }
+    return part;
+  });
+  return (
+    <>
+      <h3>Solution</h3>
+      <div
+        style={{
+          textTransform: 'uppercase',
+          marginBottom: '1rem',
+          textAlign: 'center',
+        }}
+      >
+        {questionWithKeywords}
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textTransform: 'uppercase',
+        }}
+      >
+        {intendedOrder.map((item, index) => (
+          <>
+            <div key={index}>{item.text}</div>
+            {index < intendedOrder.length - 1 && (
+              <div style={{ textTransform: 'lowercase' }}>v</div>
+            )}
+          </>
+        ))}
+      </div>
+      <h3>Your progress</h3>
+    </>
+  );
+}
+
+function generateShareableContent(
+  question: string,
+  solvedWords: string[],
+  guesses: ColumnData[]
+): string {
+  let content = '';
+
+  // Current puzzle
+  content += `Orderly #1\n`;
+  // Prompt progress
+  const numKeywords = getNumKeywords(question);
+  if (solvedWords.length === numKeywords) {
+    content += `Prompt complete ⭐\n`;
+  } else {
+    content += `Prompt progress: ${solvedWords.length} / ${numKeywords}\n`;
+  }
+  if (guesses.length > 0) {
+    for (let row = 0; row < guesses[0].length; row++) {
+      for (let col = 0; col < guesses.length; col++) {
+        const guess = guesses[col][row];
+        if (guess.hint === 'correct') {
+          content += '✅';
+        } else if (guess.hint === 'up') {
+          content += '🔼';
+        } else if (guess.hint === 'down') {
+          content += '🔽';
+        } else {
+          content += '⬜';
+        }
+      }
+      if (row < guesses[0].length - 1) {
+        content += '\n';
+      }
+    }
+  }
+  return content;
 }

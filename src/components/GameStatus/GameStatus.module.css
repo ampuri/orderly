@@ -49,3 +49,12 @@
   -moz-user-select: none;
   -ms-user-select: none;
 }
+
+.giveUpContainer {
+  display: flex;
+  text-transform: uppercase;
+  font-weight: bold;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
