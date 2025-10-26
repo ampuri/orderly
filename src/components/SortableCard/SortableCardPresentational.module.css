@@ -1,5 +1,13 @@
 .card {
+  cursor: grab;
+  width: max(200px, 12vw);
   padding: 10px;
   border: 1px solid #000;
   background-color: #aaaaaa;
+
+  touch-action: none;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-weight: bold;
+
+  display: flex;
 }

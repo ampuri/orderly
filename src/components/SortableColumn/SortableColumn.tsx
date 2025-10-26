@@ -1,7 +1,6 @@
 import {
   DndContext,
   closestCenter,
-  KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
@@ -16,7 +15,6 @@ import {
 import {
   arrayMove,
   SortableContext,
-  sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { useState } from 'react';
@@ -28,13 +26,12 @@ import styles from './SortableColumn.module.css';
 
 export function SortableColumn() {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+  const [items, setItems] = useState([
+    'Item 1',
+    'Item 2 This is very long and probably spans more than one line',
+    'Item 3',
+  ]);
+  const sensors = useSensors(useSensor(PointerSensor));
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id.toString());
@@ -68,7 +65,12 @@ export function SortableColumn() {
         </div>
       </SortableContext>
       <DragOverlay>
-        {activeId ? <SortableCardPresentational /> : null}
+        {activeId ? (
+          <SortableCardPresentational
+            text={activeId}
+            style={{ cursor: 'grabbing' }}
+          />
+        ) : null}
       </DragOverlay>
     </DndContext>
   );

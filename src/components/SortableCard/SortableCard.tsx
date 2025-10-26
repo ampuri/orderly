@@ -24,6 +24,7 @@ export function SortableCard({ id, hidden }: SortableCardProps) {
       style={style}
       {...attributes}
       {...listeners}
+      text={id}
     />
   );
 }
