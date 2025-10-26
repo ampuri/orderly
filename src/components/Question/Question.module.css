@@ -1,4 +1,7 @@
 .container {
   text-transform: uppercase;
   font-size: 2rem;
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 }

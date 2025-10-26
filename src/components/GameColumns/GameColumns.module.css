@@ -1,6 +1,10 @@
 .container {
   display: flex;
   flex-direction: row;
-
   transition: width 0.5s ease-out;
+
+  width: calc(var(--column-count) * 13vw);
+  @media (max-width: 768px) {
+    width: calc(var(--column-count) * 19vw);
+  }
 }

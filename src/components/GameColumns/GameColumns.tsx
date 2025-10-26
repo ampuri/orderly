@@ -10,7 +10,7 @@ export function GameColumns() {
   return (
     <div
       className={styles.container}
-      style={{ width: `${(guesses.length + 1) * 13}vw` }}
+      style={{ '--column-count': guesses.length + 1 } as React.CSSProperties}
     >
       {guesses.map((guess, index) => (
         <SortableColumn key={index} initialData={guess} disableAndShowHints />

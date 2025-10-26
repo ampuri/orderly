@@ -5,6 +5,7 @@
   padding: 10px;
   @media (max-width: 768px) {
     width: 19vw;
+    min-width: 19vw;
     padding: 4px;
   }
 
