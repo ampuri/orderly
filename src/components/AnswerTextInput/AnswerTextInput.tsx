@@ -34,7 +34,9 @@ export function AnswerTextInput({ answer, alsoAccepts }: AnswerTextInputProps) {
     const isMatch =
       inputValue.toLowerCase() === expectedInputValue.toLowerCase();
     const isAlsoAccepted = alsoAccepts?.some(
-      accept => inputValue.toLowerCase() === accept.toLowerCase()
+      accept =>
+        inputValue.toLowerCase() ===
+        accept.slice(LETTERS_TO_DISPLAY).toLowerCase()
     );
 
     if (isMatch || isAlsoAccepted) {
