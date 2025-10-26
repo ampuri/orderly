@@ -9,9 +9,10 @@ const LETTERS_TO_DISPLAY = 1 as const;
 
 type AnswerTextInputProps = {
   answer: string;
+  alsoAccepts?: string[];
 };
 
-export function AnswerTextInput({ answer }: AnswerTextInputProps) {
+export function AnswerTextInput({ answer, alsoAccepts }: AnswerTextInputProps) {
   const {
     gameState: { solvedWords, specialState },
     addSolvedWord,
@@ -30,11 +31,16 @@ export function AnswerTextInput({ answer }: AnswerTextInputProps) {
       setAnswerState('pending');
       return;
     }
-    if (inputValue.toLowerCase() !== expectedInputValue.toLowerCase()) {
-      setAnswerState('incorrect');
+    const isMatch =
+      inputValue.toLowerCase() !== expectedInputValue.toLowerCase();
+    const isAlsoAccepted = alsoAccepts?.some(
+      accept => inputValue.toLowerCase() === accept.toLowerCase()
+    );
+    if (isMatch || isAlsoAccepted) {
+      addSolvedWord(answer);
       return;
     }
-    addSolvedWord(answer);
+    setAnswerState('incorrect');
   };
 
   return (

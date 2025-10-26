@@ -11,8 +11,18 @@ export type ColumnData = {
   hint: 'correct' | 'up' | 'down' | undefined;
 }[];
 
-type DailyRiddleData = {
+type RawDailyRiddleData = {
   question: string;
+  alsoAccepts: Record<string, string[]>;
+  startingOrder: string[];
+  intendedOrder: string[];
+  highestText?: string;
+  lowestText?: string;
+};
+
+type TransformedDailyRiddleData = {
+  question: string;
+  alsoAccepts: Record<string, string[]>;
   startingOrder: ColumnData;
   intendedOrder: ColumnData;
   highestText?: string;
@@ -27,7 +37,7 @@ type GameState = {
 };
 
 type GameContextType = {
-  seedData: DailyRiddleData;
+  seedData: TransformedDailyRiddleData;
   gameState: GameState;
   addGuess: () => void;
   setCurrentGuess: React.Dispatch<React.SetStateAction<ColumnData>>;
@@ -38,7 +48,7 @@ type GameContextType = {
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 interface GameProviderProps {
-  dailyRiddleData: DailyRiddleData;
+  dailyRiddleData: RawDailyRiddleData;
   children: ReactNode;
 }
 
@@ -53,6 +63,15 @@ function getNumKeywords(question: string): number {
 }
 
 export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
+  const transformedStartingOrder = dailyRiddleData.startingOrder.map(text => ({
+    text,
+    hint: undefined,
+  }));
+  const transformedIntendedOrder = dailyRiddleData.intendedOrder.map(text => ({
+    text,
+    hint: undefined,
+  }));
+
   const showSolvedWordsModal = useSolvedWordsModal();
   const showSolvedRankingModal = useSolvedRankingModal();
   const [specialState, setSpecialState] =
@@ -61,7 +80,7 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
   const numKeywords = getNumKeywords(dailyRiddleData.question);
   const [guesses, setGuesses] = useState<ColumnData[]>([]);
   const [currentGuess, setCurrentGuess] = useState<ColumnData>(
-    dailyRiddleData.startingOrder
+    transformedStartingOrder
   );
   const [solvedWords, setSolvedWords] = useState<string[]>([]);
 
@@ -92,7 +111,7 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
   const addGuess = () => {
     const guessWithHints = addHintsToGuess(
       currentGuess,
-      dailyRiddleData.intendedOrder
+      transformedIntendedOrder
     );
     const newGuesses = [...guesses, guessWithHints];
     setGuesses(newGuesses);
@@ -120,10 +139,7 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
           solvedWords,
           newGuesses
         ),
-        generateSolution(
-          dailyRiddleData.question,
-          dailyRiddleData.intendedOrder
-        )
+        generateSolution(dailyRiddleData.question, transformedIntendedOrder)
       );
       setSpecialState('lose');
     }
@@ -132,13 +148,17 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
   const giveUp = () => {
     showLoseModal(
       generateShareableContent(dailyRiddleData.question, solvedWords, guesses),
-      generateSolution(dailyRiddleData.question, dailyRiddleData.intendedOrder)
+      generateSolution(dailyRiddleData.question, transformedIntendedOrder)
     );
     setSpecialState('lose');
   };
 
   const contextValue: GameContextType = {
-    seedData: dailyRiddleData,
+    seedData: {
+      ...dailyRiddleData,
+      startingOrder: transformedStartingOrder,
+      intendedOrder: transformedIntendedOrder,
+    },
     gameState: {
       guesses,
       currentGuess,
@@ -214,6 +234,7 @@ export function useGameOptions() {
 type QuestionSegment = {
   text: string;
   isKeyword: boolean;
+  alsoAccepts?: string[];
 };
 
 export function useGameQuestion(): QuestionSegment[] {
@@ -227,9 +248,12 @@ export function useGameQuestion(): QuestionSegment[] {
     .map(part => {
       const isKeyword = part.startsWith('$$') && part.endsWith('$$');
 
+      const alsoAccepts = context.seedData.alsoAccepts[part.slice(2, -2)] ?? [];
+
       return {
         text: isKeyword ? part.slice(2, -2) : part,
         isKeyword,
+        alsoAccepts,
       };
     });
 }

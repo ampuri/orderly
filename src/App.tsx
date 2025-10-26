@@ -4,35 +4,40 @@ import { GameStatus } from './components/GameStatus/GameStatus';
 import { Header } from './components/Header/Header';
 import { ModalRenderer } from './components/Modal/ModalRenderer';
 import { Question } from './components/Question/Question';
-import { GameProvider, type ColumnData } from './context/GameContext';
+import { GameProvider } from './context/GameContext';
 import { ModalProvider } from './context/ModalContext';
-
-function toColumnData(data: string[]): ColumnData {
-  return data.map(text => ({ text, hint: undefined }));
-}
 
 export function App() {
   // Mock one for now
   const dailyRiddleData = {
     question: '$$distance$$ from the $$center$$ of the $$earth$$',
-    startingOrder: toColumnData([
+    alsoAccepts: {
+      distance: [
+        'distance',
+        'distance from',
+        'distance to',
+        'distance from the',
+        'distance to the',
+      ],
+      center: ['center', 'center of', 'center of the', 'center of the earth'],
+    },
+    startingOrder: [
       'the sun',
       'the international space station',
       'the louvre',
       'the mariana trench',
       'the andromeda galaxy',
       'an airplane in flight',
-    ]),
-    intendedOrder: toColumnData([
+    ],
+    intendedOrder: [
       'the andromeda galaxy',
       'the sun',
       'the international space station',
       'an airplane in flight',
       'the louvre',
       'the mariana trench',
-    ]),
+    ],
     highestText: 'more',
-    lowestText: 'less',
   };
 
   return (

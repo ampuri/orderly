@@ -10,7 +10,10 @@ export function Question() {
       {question.map(segment => (
         <span key={segment.text}>
           {segment.isKeyword ? (
-            <AnswerTextInput answer={segment.text} />
+            <AnswerTextInput
+              answer={segment.text}
+              alsoAccepts={segment.alsoAccepts}
+            />
           ) : (
             segment.text
           )}
