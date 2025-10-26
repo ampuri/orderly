@@ -10,6 +10,10 @@ import {
   type DragStartEvent,
 } from '@dnd-kit/core';
 import {
+  restrictToVerticalAxis,
+  restrictToParentElement,
+} from '@dnd-kit/modifiers';
+import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
@@ -19,6 +23,8 @@ import { useState } from 'react';
 
 import { SortableCard } from '../SortableCard/SortableCard';
 import { SortableCardPresentational } from '../SortableCard/SortableCardPresentational';
+
+import styles from './SortableColumn.module.css';
 
 export function SortableColumn() {
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -50,13 +56,16 @@ export function SortableColumn() {
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
+      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        {items.map(id => (
-          <SortableCard key={id} id={id} />
-        ))}
+        <div className={styles.container}>
+          {items.map(id => (
+            <SortableCard key={id} id={id} hidden={activeId === id} />
+          ))}
+        </div>
       </SortableContext>
       <DragOverlay>
         {activeId ? <SortableCardPresentational /> : null}

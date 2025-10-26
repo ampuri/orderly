@@ -1,3 +1,5 @@
+import styles from './SortableCardPresentational.module.css';
+
 type SortableCardPresentationalProps = {
   // TODO props
   ref?: (node: HTMLElement | null) => void;
@@ -8,7 +10,7 @@ export function SortableCardPresentational({
   ...props
 }: SortableCardPresentationalProps) {
   return (
-    <div ref={ref} {...props}>
+    <div className={styles.card} ref={ref} {...props}>
       SortableCardPresentational
     </div>
   );
