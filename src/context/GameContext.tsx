@@ -123,6 +123,7 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
     if (savedState?.specialState === 'win') {
       showWinModal(
         generateShareableContent(
+          dailyRiddleData.day,
           dailyRiddleData.question,
           savedState.solvedWords,
           savedState.guesses
@@ -131,6 +132,7 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
     } else if (savedState?.specialState === 'lose') {
       showLoseModal(
         generateShareableContent(
+          dailyRiddleData.day,
           dailyRiddleData.question,
           savedState.solvedWords,
           savedState.guesses
@@ -162,6 +164,7 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
     if (solvedAllWords && hasCorrectGuess) {
       showWinModal(
         generateShareableContent(
+          dailyRiddleData.day,
           dailyRiddleData.question,
           newSolvedWords,
           guesses
@@ -189,6 +192,7 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
     if (solvedAllWords && hasCorrectGuess) {
       showWinModal(
         generateShareableContent(
+          dailyRiddleData.day,
           dailyRiddleData.question,
           solvedWords,
           newGuesses
@@ -200,6 +204,7 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
     } else if (!hasMoreGuesses) {
       showLoseModal(
         generateShareableContent(
+          dailyRiddleData.day,
           dailyRiddleData.question,
           solvedWords,
           newGuesses
@@ -212,7 +217,12 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
 
   const giveUp = () => {
     showLoseModal(
-      generateShareableContent(dailyRiddleData.question, solvedWords, guesses),
+      generateShareableContent(
+        dailyRiddleData.day,
+        dailyRiddleData.question,
+        solvedWords,
+        guesses
+      ),
       generateSolution(dailyRiddleData.question, transformedIntendedOrder)
     );
     setSpecialState('lose');
@@ -387,6 +397,7 @@ function generateSolution(
 }
 
 function generateShareableContent(
+  day: number,
   question: string,
   solvedWords: string[],
   guesses: ColumnData[]
@@ -394,7 +405,7 @@ function generateShareableContent(
   let content = '';
 
   // Current puzzle
-  content += `Orderly #1\n`;
+  content += `Orderly #${day}\n`;
   // Prompt progress
   const numKeywords = getNumKeywords(question);
   if (solvedWords.length === numKeywords) {

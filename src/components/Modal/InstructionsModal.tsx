@@ -28,7 +28,8 @@ export function useInstructionsModal() {
             <br />
             <br />
             You can guess words in the criteria at any time, and there are{' '}
-            <strong>unlimited guesses for words</strong>.
+            <strong>unlimited guesses for words</strong>. If two checks have
+            been made, the first letter of the words will also be revealed.
             <br />
             <br />
             You need to both <strong>

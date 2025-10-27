@@ -4,8 +4,6 @@ import { useGameContext } from '../../context/GameContext';
 
 import styles from './AnswerTextInput.module.css';
 
-const LETTERS_TO_DISPLAY = 0 as const;
-
 type AnswerTextInputProps = {
   answer: string;
   alsoAccepts?: string[];
@@ -13,10 +11,11 @@ type AnswerTextInputProps = {
 
 export function AnswerTextInput({ answer, alsoAccepts }: AnswerTextInputProps) {
   const {
-    gameState: { solvedWords, specialState },
+    gameState: { solvedWords, specialState, guesses },
     addSolvedWord,
   } = useGameContext();
   const isSolved = solvedWords.includes(answer);
+  const LETTERS_TO_DISPLAY = guesses.length >= 2 ? 1 : 0;
   const displayedLetters = answer.slice(0, LETTERS_TO_DISPLAY);
   const expectedInputValue = answer.slice(LETTERS_TO_DISPLAY);
   const [inputValue, setInputValue] = useState('');

@@ -17,17 +17,65 @@
   },
   {
     "day": 2,
-    "question": "$$likeliness$$ to $$kill$$ you in an $$attack$$",
+    "question": "$$number$$ of $$holes$$",
     "alsoAccepts": {
-      "likeliness": ["likelihood"]
+      "number": ["quantity", "amount", "count", "frequency"],
+      "holes": ["voids", "hole"]
     },
     "intendedOrder": [
-      "the heat death of the universe",
-      "a nuclear warhead",
-      "a bear",
-      "an average human",
-      "a baby",
-      "phytoplankton"
+      "a chain link fence",
+      "a showerhead",
+      "a flute",
+      "a bowling ball",
+      "a donut",
+      "a diamond"
+    ]
+  },
+  {
+    "day": 3,
+    "question": "$$usefulness$$ for $$demolishing$$ a $$building$$",
+    "alsoAccepts": {
+      "usefulness": ["useful", "utility", "helpfulness", "helpful"],
+      "demolishing": [
+        "demolish",
+        "destory",
+        "break",
+        "obliterate",
+        "destroying",
+        "breaking",
+        "obliterating"
+      ],
+      "building": ["house", "condo", "apartment", "structure"]
+    },
+    "intendedOrder": [
+      "explosives",
+      "a wrecking ball",
+      "a bus",
+      "a chainsaw",
+      "a metal baseball bat",
+      "a soda can"
+    ]
+  },
+  {
+    "day": 4,
+    "question": "$$number$$ of $$changes$$ per year",
+    "alsoAccepts": {
+      "number": ["quantity", "amount", "count", "frequency"],
+      "changes": [
+        "changes",
+        "change",
+        "differences",
+        "updates",
+        "modifications"
+      ]
+    },
+    "intendedOrder": [
+      "a traffic light",
+      "your outfit",
+      "supermarket flyers",
+      "the season",
+      "newest iphone",
+      "the speed of light"
     ]
   }
 ]
