@@ -33,27 +33,18 @@
   },
   {
     "day": 3,
-    "question": "$$usefulness$$ for $$demolishing$$ a $$building$$",
+    "question": "$$number$$ of $$legs$$",
     "alsoAccepts": {
-      "usefulness": ["useful", "utility", "helpfulness", "helpful"],
-      "demolishing": [
-        "demolish",
-        "destory",
-        "break",
-        "obliterate",
-        "destroying",
-        "breaking",
-        "obliterating"
-      ],
-      "building": ["house", "condo", "apartment", "structure"]
+      "number": ["amount", "quantity", "count"],
+      "legs": ["leg", "legs"]
     },
     "intendedOrder": [
-      "explosives",
-      "a wrecking ball",
-      "a bus",
-      "a chainsaw",
-      "a metal baseball bat",
-      "a soda can"
+      "a college campus",
+      "a ladybug",
+      "a standard relay race",
+      "paimon (genshin impact)",
+      "\"a college campus\"",
+      "a rock"
     ]
   },
   {
