@@ -80,7 +80,7 @@ export function SortableColumn({
             disableAndShowHints && styles.containerDisabled,
           ].join(' ')}
         >
-          <div className={styles.labelText}>{highestText || 'more'}</div>
+          <div className={styles.labelText}>{highestText || 'most'}</div>
           <div className={styles.boundingBox}>
             {items.map(item => (
               <SortableCard
@@ -92,7 +92,7 @@ export function SortableColumn({
               />
             ))}
           </div>
-          <div className={styles.labelText}>{lowestText || 'less'}</div>
+          <div className={styles.labelText}>{lowestText || 'least'}</div>
         </div>
       </SortableContext>
       <DragOverlay>
