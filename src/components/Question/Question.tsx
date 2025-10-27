@@ -6,7 +6,7 @@ import styles from './Question.module.css';
 export function Question() {
   const question = useGameQuestion();
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-tour="question">
       {question.map(segment => (
         <span key={segment.text}>
           {segment.isKeyword ? (

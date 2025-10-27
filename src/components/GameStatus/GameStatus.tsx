@@ -12,7 +12,7 @@ export function GameStatus() {
 
   const canGuessMore = useCanGuessMore();
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-tour="game-status">
       <div className={styles.guessesLeft}>
         Checks left:{' '}
         {Array.from({ length: numGuessesLeft }).map((_, index) => (

@@ -6,7 +6,11 @@ import { useInstructionsModal } from '../Modal/InstructionsModal';
 
 import styles from './Header.module.css';
 
-export function Header() {
+interface HeaderProps {
+  onStartTour: () => void;
+}
+
+export function Header({ onStartTour }: HeaderProps) {
   const [giveUpConfirmation, setGiveUpConfirmation] = useState(0);
   const { giveUp } = useGameContext();
   const showInstructionsModal = useInstructionsModal();
@@ -18,12 +22,15 @@ export function Header() {
         <div className={styles.title}>Orderly</div>
         <div className={styles.countdownChip}>{countdown}</div>
       </div>
-      <div className={styles.buttonsContainer}>
+      <div className={styles.buttonsContainer} data-tour="header-buttons">
         <button
           className={styles.button}
           onClick={() => showInstructionsModal()}
         >
           Instructions
+        </button>
+        <button className={styles.button} onClick={onStartTour}>
+          Tour
         </button>
         <div className={styles.giveUpContainer}>
           {giveUpConfirmation === 0 && (

@@ -11,6 +11,7 @@ export function GameColumns() {
   return (
     <div
       className={styles.container}
+      data-tour="game-columns"
       style={
         {
           '--column-count': guesses.length + (canGuessMore ? 1 : 0),
