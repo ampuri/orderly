@@ -1,9 +1,12 @@
-const START_DATE = new Date('2025-10-26T00:00:00');
+// Start date at 4:00 UTC on October 26, 2025
+const START_DATE = new Date('2025-10-26T04:00:00Z');
 
 /**
  * Calculates the current puzzle day based on the start date
- * Returns 1 for the first day (2025-10-26), 2 for the next day, etc.
+ * Returns 1 for the first day (2025-10-26 at 4:00 UTC), 2 for the next day, etc.
  * Can be overridden with ?day=x query parameter for testing
+ *
+ * Note: Each day starts at 4:00 UTC, so everyone worldwide sees the new puzzle at the same time
  */
 export function getCurrentPuzzleDay(): number {
   // Check for testing query param
@@ -17,40 +20,41 @@ export function getCurrentPuzzleDay(): number {
   }
 
   const now = new Date();
-  const startOfToday = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate()
-  );
-  const startOfStartDate = new Date(
-    START_DATE.getFullYear(),
-    START_DATE.getMonth(),
-    START_DATE.getDate()
-  );
-
-  const diffTime = startOfToday.getTime() - startOfStartDate.getTime();
+  const diffTime = now.getTime() - START_DATE.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
   return diffDays + 1; // Day 1 is the start date
 }
 
 /**
- * Gets the time remaining until the next puzzle (midnight)
+ * Gets the time remaining until the next puzzle (4:00 UTC)
  * Returns milliseconds until next day
  */
 export function getTimeUntilNextPuzzle(): number {
   const now = new Date();
 
-  const tomorrow = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() + 1,
-    0,
-    0,
-    0,
-    0
+  // Create a date for today at 4:00 UTC
+  const todayAt4UTC = new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      4,
+      0,
+      0,
+      0
+    )
   );
-  return tomorrow.getTime() - now.getTime();
+
+  // If we're past 4:00 UTC today, the next puzzle is tomorrow at 4:00 UTC
+  let nextPuzzleTime: Date;
+  if (now.getTime() >= todayAt4UTC.getTime()) {
+    nextPuzzleTime = new Date(todayAt4UTC.getTime() + 24 * 60 * 60 * 1000);
+  } else {
+    nextPuzzleTime = todayAt4UTC;
+  }
+
+  return nextPuzzleTime.getTime() - now.getTime();
 }
 
 /**
