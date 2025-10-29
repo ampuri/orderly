@@ -49,15 +49,18 @@
   },
   {
     "day": 4,
-    "question": "$$number$$ of $$changes$$ per year",
+    "question": "$$number$$ of $$changes$$",
     "alsoAccepts": {
       "number": ["quantity", "amount", "count", "frequency"],
       "changes": [
         "changes",
         "change",
         "differences",
+        "difference",
         "updates",
-        "modifications"
+        "update",
+        "modifications",
+        "modification"
       ]
     },
     "intendedOrder": [
