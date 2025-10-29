@@ -71,5 +71,22 @@
       "newest iphone",
       "the speed of light"
     ]
+  },
+  {
+    "day": 5,
+    "question": "how $$wide$$ the $$text$$ is on the $$screen$$",
+    "alsoAccepts": {
+      "wide": ["thick", "broad", "fat", "large"],
+      "text": ["word", "name", "copy", "city"],
+      "screen": ["page", "display", "card", "column", "window"]
+    },
+    "intendedOrder": [
+      "washington",
+      "new york",
+      "irvine",
+      "beijing",
+      "chicago",
+      "giza"
+    ]
   }
 ]
