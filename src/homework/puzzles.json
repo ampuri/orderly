@@ -88,5 +88,32 @@
       "chicago",
       "giza"
     ]
+  },
+  {
+    "day": 6,
+    "question": "$$number$$ of $$belts$$ in their $$design$$",
+    "alsoAccepts": {
+      "number": ["quantity", "amount", "count", "frequency", "sum", "total"],
+      "belts": ["belt", "belts"],
+      "design": [
+        "design",
+        "designs",
+        "clothes",
+        "clothing",
+        "outfit",
+        "fit",
+        "appearance",
+        "style",
+        "art"
+      ]
+    },
+    "intendedOrder": [
+      "rune slayer",
+      "veteran commander",
+      "wind sneaker",
+      "iron paladin",
+      "dimension witch",
+      "code: battle seraph"
+    ]
   }
 ]
