@@ -115,5 +115,23 @@
       "dimension witch",
       "code: battle seraph"
     ]
+  },
+  {
+    "day": 7,
+    "question": "$$order$$ in the $$lyrics$$ of $$spooky$$ $$scary$$ $$skeletons$$",
+    "alsoAccepts": {
+      "order": ["sequence", "appearance"],
+      "lyrics": ["words"]
+    },
+    "intendedOrder": [
+      "spooky",
+      "scary",
+      "skeleton",
+      "shriek",
+      "screech",
+      "shudder"
+    ],
+    "highestText": "earlier",
+    "lowestText": "later"
   }
 ]
