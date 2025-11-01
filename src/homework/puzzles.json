@@ -139,7 +139,7 @@
     "question": "$$alphabetical$$ $$order$$ of the $$homophone$$",
     "alsoAccepts": {
       "order": ["sequence"],
-      "homophone": ["sound-alike"]
+      "homophone": ["sound-alike", "homophones", "homonym", "homonyms"]
     },
     "intendedOrder": ["I", "J", "C", "T", "Y", "U"],
     "highestText": "earlier",
