@@ -5,6 +5,7 @@ const START_DATE = new Date('2025-10-26T02:00:00Z');
  * Calculates the current puzzle day based on the start date
  * Returns 1 for the first day (2025-10-25 at 10PM ET / 2025-10-26 at 2:00 UTC), 2 for the next day, etc.
  * Can be overridden with ?day=x query parameter for testing
+ * Use ?tmr=1 to get tomorrow's puzzle
  *
  * Note: Each day starts at 2:00 UTC (10PM ET), so everyone worldwide sees the new puzzle at the same time
  */
@@ -23,7 +24,15 @@ export function getCurrentPuzzleDay(): number {
   const diffTime = now.getTime() - START_DATE.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-  return diffDays + 1; // Day 1 is the start date
+  const currentDay = diffDays + 1; // Day 1 is the start date
+
+  // Check for tomorrow parameter
+  const tmrParam = urlParams.get('tmr');
+  if (tmrParam !== null) {
+    return currentDay + 1;
+  }
+
+  return currentDay;
 }
 
 /**

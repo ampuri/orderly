@@ -108,7 +108,7 @@ const tutorialSteps: Step[] = [
 
 export function App() {
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('reset') === 'true') {
+  if (urlParams.has('reset')) {
     clearAllLocalStorage();
   }
 
