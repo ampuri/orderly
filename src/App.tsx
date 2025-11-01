@@ -71,9 +71,9 @@ const tutorialSteps: Step[] = [
     target: '[data-tour="question"]',
     content: (
       <div>
-        You have an infinite amount of attempts to{' '}
-        <strong>guess the criteria</strong>, however it may be difficult without
-        first checking the ranking a few times.
+        Each word has <strong>limited guesses</strong>, and you get an
+        additional guess every time you check the ranking. Once you get the
+        ranking correct, the limit is removed.
         <br />
         <br />
         After you check the <strong>ranking</strong> twice, the first letter of

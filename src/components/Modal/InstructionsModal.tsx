@@ -27,15 +27,11 @@ export function useInstructionsModal() {
             if a given card needs to go up ⬆️ or down ⬇️.
             <br />
             <br />
-            You can guess words in the criteria at any time, and there are{' '}
-            <strong>unlimited guesses for words</strong>. If two checks have
-            been made, the first letter of the words will also be revealed.
-            <br />
-            <br />
-            You need to both <strong>
-              guess the criteria correctly
-            </strong> and <strong>order the cards correctly</strong> to complete
-            the puzzle!
+            Each word has <strong>limited guesses</strong>, and you get an
+            additional guess every time you check the ranking. Once you get the
+            ranking correct, this limit is removed. You need to both{' '}
+            <strong>guess the criteria correctly</strong> and{' '}
+            <strong>order the cards correctly</strong> to complete the puzzle!
           </p>
         </>
       ),

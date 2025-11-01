@@ -44,6 +44,7 @@ export type GameState = {
   currentGuess: ColumnData;
   guesses: ColumnData[];
   solvedWords: string[];
+  wordGuessCount: number[];
   specialState: 'win' | 'lose' | undefined;
 };
 
@@ -53,6 +54,7 @@ type GameContextType = {
   addGuess: () => void;
   setCurrentGuess: React.Dispatch<React.SetStateAction<ColumnData>>;
   addSolvedWord: (word: string) => void;
+  incrementGuessesForIndex: (index: number) => void;
   giveUp: () => void;
 };
 
@@ -114,6 +116,9 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
   const [solvedWords, setSolvedWords] = useState<string[]>(
     savedState?.solvedWords ?? []
   );
+  const [wordGuessCount, setWordGuessCount] = useState<number[]>(
+    savedState?.wordGuessCount ?? Array(numKeywords).fill(0)
+  );
 
   const showWinModal = useWinModal();
   const showLoseModal = useLoseModal();
@@ -149,10 +154,18 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
       currentGuess,
       guesses,
       solvedWords,
+      wordGuessCount,
       specialState,
     };
     updateLocalStorage(dailyRiddleData.day, gameState);
-  }, [currentGuess, guesses, solvedWords, specialState, dailyRiddleData.day]);
+  }, [
+    currentGuess,
+    guesses,
+    solvedWords,
+    wordGuessCount,
+    specialState,
+    dailyRiddleData.day,
+  ]);
 
   const addSolvedWord = (word: string) => {
     const newSolvedWords = [...solvedWords, word];
@@ -215,6 +228,14 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
     }
   };
 
+  const incrementGuessesForIndex = (index: number) => {
+    setWordGuessCount(prev => {
+      const newCount = [...prev];
+      newCount[index] = (newCount[index] || 0) + 1;
+      return newCount;
+    });
+  };
+
   const giveUp = () => {
     showLoseModal(
       generateShareableContent(
@@ -238,11 +259,13 @@ export function GameProvider({ dailyRiddleData, children }: GameProviderProps) {
       guesses,
       currentGuess,
       solvedWords,
+      wordGuessCount,
       specialState,
     },
     addGuess,
     setCurrentGuess,
     addSolvedWord,
+    incrementGuessesForIndex,
     giveUp,
   };
 
@@ -309,6 +332,7 @@ export function useGameOptions() {
 type QuestionSegment = {
   text: string;
   isKeyword: boolean;
+  keywordIndex?: number;
   alsoAccepts?: string[];
 };
 
@@ -318,6 +342,8 @@ export function useGameQuestion(): QuestionSegment[] {
   const question = context.seedData.question;
   const parts = question.split(/(\$\$[^$]+\$\$)/);
 
+  let keywordCount = 0;
+
   return parts
     .filter(part => part.length > 0)
     .map(part => {
@@ -325,11 +351,18 @@ export function useGameQuestion(): QuestionSegment[] {
 
       const alsoAccepts = context.seedData.alsoAccepts[part.slice(2, -2)] ?? [];
 
-      return {
+      const segment: QuestionSegment = {
         text: isKeyword ? part.slice(2, -2) : part,
         isKeyword,
         alsoAccepts,
       };
+
+      if (isKeyword) {
+        segment.keywordIndex = keywordCount;
+        keywordCount++;
+      }
+
+      return segment;
     });
 }
 

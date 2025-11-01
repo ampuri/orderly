@@ -133,5 +133,16 @@
     ],
     "highestText": "earlier",
     "lowestText": "later"
+  },
+  {
+    "day": 8,
+    "question": "$$alphabetical$$ $$order$$ of the $$homophone$$",
+    "alsoAccepts": {
+      "order": ["sequence"],
+      "homophone": ["sound-alike"]
+    },
+    "intendedOrder": ["I", "J", "C", "T", "Y", "U"],
+    "highestText": "earlier",
+    "lowestText": "later"
   }
 ]

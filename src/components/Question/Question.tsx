@@ -13,6 +13,7 @@ export function Question() {
             <AnswerTextInput
               answer={segment.text}
               alsoAccepts={segment.alsoAccepts}
+              keywordIndex={segment.keywordIndex!}
             />
           ) : (
             segment.text
