@@ -144,5 +144,41 @@
     "intendedOrder": ["I", "J", "C", "T", "Y", "U"],
     "highestText": "earlier",
     "lowestText": "later"
+  },
+  {
+    "day": 9,
+    "question": "$$amount$$ in a $$deck$$ of $$cards$$",
+    "alsoAccepts": {
+      "amount": ["number", "quantity", "count", "probability", "likelihood"],
+      "deck": ["pack"]
+    },
+    "intendedOrder": ["card", "black", "even", "diamond", "face", "two"]
+  },
+  {
+    "day": 10,
+    "question": "$$burger$$",
+    "alsoAccepts": {
+      "burger": ["sandwich", "hamburger", "cheeseburger"]
+    },
+    "intendedOrder": [
+      "sesame seeds",
+      "top bun",
+      "toppings",
+      "cheese",
+      "patty",
+      "bottom bun"
+    ],
+    "highestText": "",
+    "lowestText": ""
+  },
+  {
+    "day": 11,
+    "question": "how $$likely$$ it could $$kill$$ $$you$$",
+    "alsoAccepts": {
+      "likely": ["probability", "possible"],
+      "kill": ["harm", "damage", "injury", "injure", "maim"],
+      "you": ["someone", "another", "me", "yourself"]
+    },
+    "intendedOrder": ["♐", "♌", "♉", "♏", "♋", "♒"]
   }
 ]
