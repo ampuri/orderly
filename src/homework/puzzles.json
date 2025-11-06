@@ -180,5 +180,33 @@
       "you": ["someone", "another", "me", "yourself"]
     },
     "intendedOrder": ["♐", "♌", "♉", "♏", "♋", "♒"]
+  },
+  {
+    "day": 12,
+    "question": "how $$good$$ of a $$reason$$ it is for $$missing$$ $$work$$",
+    "alsoAccepts": {
+      "good": [
+        "great",
+        "excellent",
+        "fantastic",
+        "wonderful",
+        "solid",
+        "positive",
+        "believable",
+        "convincing",
+        "effective"
+      ],
+      "reason": ["excuse", "explanation", "justification", "alibi"],
+      "missing": ["skipping"],
+      "work": ["job", "school"]
+    },
+    "intendedOrder": [
+      "i'm dead",
+      "my entire family died",
+      "i broke my leg",
+      "i had a cold",
+      "i forgot",
+      "i didn't want to"
+    ]
   }
 ]
