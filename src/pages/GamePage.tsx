@@ -260,7 +260,7 @@ export function GamePage() {
                 The requested puzzle could not be found in the database.
               </p>
               <a
-                href="/"
+                href="#/"
                 style={{
                   display: 'inline-block',
                   marginTop: '2rem',

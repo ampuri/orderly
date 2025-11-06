@@ -32,6 +32,9 @@ export function Header({ onStartTour }: HeaderProps) {
         <button className={styles.button} onClick={onStartTour}>
           Tour
         </button>
+        <a href="#/admin" className={styles.button}>
+          Admin
+        </a>
         <div className={styles.giveUpContainer}>
           {giveUpConfirmation === 0 && (
             <button
