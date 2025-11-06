@@ -9,6 +9,7 @@ import { ModalRenderer } from '../components/Modal/ModalRenderer';
 import { Question } from '../components/Question/Question';
 import { GameProvider, type RawDailyRiddleData } from '../context/GameContext';
 import { ModalProvider } from '../context/ModalContext';
+import { useFirebaseAuth } from '../hooks/useFirebaseAuth';
 import { clearAllLocalStorage } from '../utils/localStorage';
 import { getCurrentPuzzleDay } from '../utils/puzzleDay';
 import { getAllPuzzles } from '../utils/puzzleManager';
@@ -118,13 +119,19 @@ export function GamePage() {
     clearAllLocalStorage();
   }
 
+  // Authenticate anonymously with Firebase
+  const { loading: authLoading } = useFirebaseAuth();
+
   const [runTutorial, setRunTutorial] = useState(false);
   const [allPuzzles, setAllPuzzles] = useState<RawDailyRiddleData[]>([]);
   const [puzzlesLoading, setPuzzlesLoading] = useState(true);
   const [puzzlesError, setPuzzlesError] = useState<string | null>(null);
 
-  // Load all puzzles from Firebase on mount
+  // Load all puzzles from Firebase once authenticated
   useEffect(() => {
+    // Wait for auth to complete
+    if (authLoading) return;
+
     const loadPuzzles = async () => {
       try {
         setPuzzlesLoading(true);
@@ -141,7 +148,7 @@ export function GamePage() {
     };
 
     loadPuzzles();
-  }, []);
+  }, [authLoading]);
 
   // Check if user has seen the tutorial
   useEffect(() => {
@@ -167,8 +174,8 @@ export function GamePage() {
     setRunTutorial(true);
   };
 
-  // Handle loading state
-  if (puzzlesLoading) {
+  // Handle loading state (including auth)
+  if (authLoading || puzzlesLoading) {
     return (
       <div
         style={{
