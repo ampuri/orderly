@@ -108,7 +108,11 @@ const tutorialSteps: Step[] = [
 ];
 
 export function GamePage() {
-  const urlParams = new URLSearchParams(window.location.search);
+  // With HashRouter, query params are in the hash, not in window.location.search
+  // Extract query string from hash (e.g., "#/?test=abc" -> "?test=abc")
+  const hashParts = window.location.hash.split('?');
+  const queryString = hashParts.length > 1 ? hashParts.slice(1).join('?') : '';
+  const urlParams = new URLSearchParams(queryString);
 
   // Check for test parameter
   const testParam = urlParams.get('test');

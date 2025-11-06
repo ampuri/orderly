@@ -11,7 +11,11 @@ const START_DATE = new Date('2025-10-26T02:00:00Z');
  */
 export function getCurrentPuzzleDay(): number {
   // Check for testing query param
-  const urlParams = new URLSearchParams(window.location.search);
+  // With HashRouter, query params are in the hash, not in window.location.search
+  const hashParts = window.location.hash.split('?');
+  const queryString = hashParts.length > 1 ? hashParts.slice(1).join('?') : '';
+  const urlParams = new URLSearchParams(queryString);
+
   const dayParam = urlParams.get('day');
   if (dayParam) {
     const parsedDay = parseInt(dayParam, 10);
