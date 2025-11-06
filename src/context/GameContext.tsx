@@ -28,6 +28,8 @@ export type RawDailyRiddleData = {
   intendedOrder: string[];
   highestText?: string;
   lowestText?: string;
+  author?: string;
+  lastModified?: number;
 };
 
 type TransformedDailyRiddleData = {
