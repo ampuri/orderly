@@ -351,7 +351,8 @@ export function useGameQuestion(): QuestionSegment[] {
     .map(part => {
       const isKeyword = part.startsWith('$$') && part.endsWith('$$');
 
-      const alsoAccepts = context.seedData.alsoAccepts[part.slice(2, -2)] ?? [];
+      const alsoAccepts =
+        context.seedData.alsoAccepts?.[part.slice(2, -2)] ?? [];
 
       const segment: QuestionSegment = {
         text: isKeyword ? part.slice(2, -2) : part,
