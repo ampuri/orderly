@@ -40,6 +40,7 @@ type TransformedDailyRiddleData = {
   intendedOrder: ColumnData;
   highestText?: string;
   lowestText?: string;
+  author?: string;
 };
 
 export type GameState = {
@@ -386,6 +387,11 @@ export function useCanGuessMore(): boolean {
   return !guessIsAllCorrect(
     context.gameState.guesses[context.gameState.guesses.length - 1]
   );
+}
+
+export function useGameAuthor(): string | undefined {
+  const context = useGameContext();
+  return context.seedData.author;
 }
 
 function generateSolution(

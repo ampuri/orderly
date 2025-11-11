@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useGameContext } from '../../context/GameContext';
+import { useGameContext, useGameAuthor } from '../../context/GameContext';
 import { useCountdown } from '../../hooks/useCountdown';
 import { useInstructionsModal } from '../Modal/InstructionsModal';
 
@@ -15,11 +15,15 @@ export function Header({ onStartTour }: HeaderProps) {
   const { giveUp } = useGameContext();
   const showInstructionsModal = useInstructionsModal();
   const countdown = useCountdown();
+  const author = useGameAuthor();
 
   return (
     <header className={styles.header}>
       <div className={styles.titleContainer}>
-        <div className={styles.title}>Orderly</div>
+        <div className={styles.titleWrapper}>
+          <div className={styles.title}>Orderly</div>
+          {author && <div className={styles.author}>puzzle by {author}</div>}
+        </div>
         <div className={styles.countdownChip}>{countdown}</div>
       </div>
       <div className={styles.buttonsContainer} data-tour="header-buttons">
@@ -27,7 +31,7 @@ export function Header({ onStartTour }: HeaderProps) {
           className={styles.button}
           onClick={() => showInstructionsModal()}
         >
-          Instructions
+          Info
         </button>
         <button className={styles.button} onClick={onStartTour}>
           Tour

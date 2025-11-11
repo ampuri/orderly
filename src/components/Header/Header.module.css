@@ -14,10 +14,25 @@
   gap: 1rem;
 }
 
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+}
+
 .title {
   font-size: 1.5rem;
   font-weight: bold;
   text-transform: uppercase;
+}
+
+.author {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: #888;
+  margin-top: -0.25rem;
+  text-align: center;
 }
 
 .countdownChip {
