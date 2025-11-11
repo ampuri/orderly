@@ -83,12 +83,12 @@ export function PuzzleFormModal({
     puzzle?.intendedOrder
       ? puzzle.intendedOrder.map(parseOrderItem)
       : [
-          { format: 'text', value: 'item 1' },
-          { format: 'text', value: 'item 2' },
-          { format: 'text', value: 'item 3' },
-          { format: 'text', value: 'item 4' },
-          { format: 'text', value: 'item 5' },
-          { format: 'text', value: 'item 6' },
+          { format: 'text', value: '' },
+          { format: 'text', value: '' },
+          { format: 'text', value: '' },
+          { format: 'text', value: '' },
+          { format: 'text', value: '' },
+          { format: 'text', value: '' },
         ]
   );
   const [alsoAccepts, setAlsoAccepts] = useState<Record<string, string[]>>(
