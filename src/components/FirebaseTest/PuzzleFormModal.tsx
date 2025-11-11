@@ -20,6 +20,52 @@ function extractKeywords(question: string): string[] {
   return matches.map(m => m.replace(/\$\$/g, '').trim());
 }
 
+type ItemFormat = 'text' | 'image' | 'link' | 'html';
+
+interface OrderItem {
+  format: ItemFormat;
+  value: string;
+  linkUrl?: string;
+  linkText?: string;
+}
+
+// Parse a stored string into an OrderItem
+function parseOrderItem(text: string): OrderItem {
+  if (text.startsWith('img::')) {
+    return { format: 'image', value: text.substring(5).trim() };
+  }
+  if (text.startsWith('link::')) {
+    const match = text.match(/link::(.+?)(?:\s+)?text::(.+)/);
+    if (match) {
+      return {
+        format: 'link',
+        value: '',
+        linkUrl: match[1].trim(),
+        linkText: match[2].trim(),
+      };
+    }
+  }
+  if (text.startsWith('html::')) {
+    return { format: 'html', value: text.substring(6).trim() };
+  }
+  return { format: 'text', value: text };
+}
+
+// Convert an OrderItem back to the stored string format
+function serializeOrderItem(item: OrderItem): string {
+  switch (item.format) {
+    case 'image':
+      return `img::${item.value}`;
+    case 'link':
+      return `link::${item.linkUrl}text::${item.linkText}`;
+    case 'html':
+      return `html::${item.value}`;
+    case 'text':
+    default:
+      return item.value;
+  }
+}
+
 export function PuzzleFormModal({
   puzzle,
   onSave,
@@ -33,15 +79,17 @@ export function PuzzleFormModal({
   const [question, setQuestion] = useState(
     puzzle?.question || 'This is my $$new$$ $$puzzle$$'
   );
-  const [intendedOrder, setIntendedOrder] = useState<string[]>(
-    puzzle?.intendedOrder || [
-      'item 1',
-      'item 2',
-      'item 3',
-      'item 4',
-      'item 5',
-      'item 6',
-    ]
+  const [intendedOrder, setIntendedOrder] = useState<OrderItem[]>(
+    puzzle?.intendedOrder
+      ? puzzle.intendedOrder.map(parseOrderItem)
+      : [
+          { format: 'text', value: 'item 1' },
+          { format: 'text', value: 'item 2' },
+          { format: 'text', value: 'item 3' },
+          { format: 'text', value: 'item 4' },
+          { format: 'text', value: 'item 5' },
+          { format: 'text', value: 'item 6' },
+        ]
   );
   const [alsoAccepts, setAlsoAccepts] = useState<Record<string, string[]>>(
     puzzle?.alsoAccepts || {
@@ -79,9 +127,47 @@ export function PuzzleFormModal({
     });
   }, [question]);
 
-  const handleIntendedOrderChange = (index: number, value: string) => {
+  const handleFormatChange = (index: number, format: ItemFormat) => {
     const newOrder = [...intendedOrder];
-    newOrder[index] = value;
+    const currentItem = newOrder[index];
+
+    // When switching to link, initialize with current value if it's text
+    if (format === 'link') {
+      newOrder[index] = {
+        format: 'link',
+        value: '',
+        linkUrl: 'https://example.com',
+        linkText: currentItem.format === 'text' ? currentItem.value : 'item',
+      };
+    } else {
+      // For other formats, preserve value if possible
+      newOrder[index] = {
+        format,
+        value: currentItem.format === 'text' ? currentItem.value : '',
+      };
+    }
+
+    setIntendedOrder(newOrder);
+  };
+
+  const handleIntendedOrderChange = (
+    index: number,
+    value: string,
+    field?: 'url' | 'text'
+  ) => {
+    const newOrder = [...intendedOrder];
+    const item = newOrder[index];
+
+    if (item.format === 'link' && field) {
+      if (field === 'url') {
+        item.linkUrl = value;
+      } else if (field === 'text') {
+        item.linkText = value;
+      }
+    } else {
+      item.value = value;
+    }
+
     setIntendedOrder(newOrder);
   };
 
@@ -119,8 +205,14 @@ export function PuzzleFormModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate that we have exactly 6 items
-    const validItems = intendedOrder.filter(item => item.trim() !== '');
+    // Validate that we have exactly 6 items with valid data
+    const validItems = intendedOrder.filter(item => {
+      if (item.format === 'link') {
+        return item.linkUrl?.trim() && item.linkText?.trim();
+      }
+      return item.value.trim() !== '';
+    });
+
     if (validItems.length !== 6) {
       showToast(
         'Please provide exactly 6 items in the intended order',
@@ -134,7 +226,7 @@ export function PuzzleFormModal({
       const puzzleData: RawDailyRiddleData = {
         day: puzzle?.day || 0, // Will be set by addPuzzle if new
         question,
-        intendedOrder: validItems,
+        intendedOrder: intendedOrder.map(serializeOrderItem),
         alsoAccepts,
         ...(highestText && { highestText }),
         ...(lowestText && { lowestText }),
@@ -198,44 +290,113 @@ export function PuzzleFormModal({
             <div className={styles.section}>
               <label className={styles.label}>Intended Order</label>
               <div className={styles.orderList}>
-                {intendedOrder.map((item, index) => (
-                  <div key={index} className={styles.orderItem}>
-                    <span className={styles.orderNumber}>{index + 1}.</span>
-                    <input
-                      type="text"
-                      value={item}
-                      onChange={e =>
-                        handleIntendedOrderChange(index, e.target.value)
-                      }
-                      className={styles.orderInput}
-                      placeholder={`Item ${index + 1}`}
-                      required
-                      disabled={disabled}
-                    />
-                    <div className={styles.moveButtons}>
-                      <button
-                        type="button"
-                        onClick={() => handleMoveItem(index, 'up')}
-                        className={styles.moveButton}
-                        disabled={index === 0 || disabled}
-                        title="Move up"
-                      >
-                        ⬆️
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleMoveItem(index, 'down')}
-                        className={styles.moveButton}
-                        disabled={
-                          index === intendedOrder.length - 1 || disabled
+                {intendedOrder.map((item, index) => {
+                  const getPlaceholder = (format: ItemFormat) => {
+                    switch (format) {
+                      case 'image':
+                        return 'https://example.com/image.jpg';
+                      case 'link':
+                        return 'URL and Text';
+                      case 'html':
+                        return '<i>item</i>';
+                      case 'text':
+                      default:
+                        return 'item';
+                    }
+                  };
+
+                  return (
+                    <div key={index} className={styles.orderItem}>
+                      <span className={styles.orderNumber}>{index + 1}.</span>
+                      <select
+                        value={item.format}
+                        onChange={e =>
+                          handleFormatChange(
+                            index,
+                            e.target.value as ItemFormat
+                          )
                         }
-                        title="Move down"
+                        className={styles.formatSelect}
+                        disabled={disabled}
                       >
-                        ⬇️
-                      </button>
+                        <option value="text">Normal Text</option>
+                        <option value="image">Image URL</option>
+                        <option value="link">Hyperlink</option>
+                        <option value="html">HTML (Experimental)</option>
+                      </select>
+                      {item.format === 'link' ? (
+                        <>
+                          <label className={styles.inputLabel}>URL:</label>
+                          <input
+                            type="text"
+                            value={item.linkUrl || ''}
+                            onChange={e =>
+                              handleIntendedOrderChange(
+                                index,
+                                e.target.value,
+                                'url'
+                              )
+                            }
+                            className={styles.orderInput}
+                            placeholder="https://example.com"
+                            required
+                            disabled={disabled}
+                          />
+                          <label className={styles.inputLabel}>Text:</label>
+                          <input
+                            type="text"
+                            value={item.linkText || ''}
+                            onChange={e =>
+                              handleIntendedOrderChange(
+                                index,
+                                e.target.value,
+                                'text'
+                              )
+                            }
+                            className={styles.orderInput}
+                            placeholder="Link text"
+                            required
+                            disabled={disabled}
+                          />
+                        </>
+                      ) : (
+                        <input
+                          type="text"
+                          value={item.value}
+                          onChange={e =>
+                            handleIntendedOrderChange(index, e.target.value)
+                          }
+                          className={styles.orderInput}
+                          placeholder={getPlaceholder(item.format)}
+                          required
+                          disabled={disabled}
+                        />
+                      )}
+                      <div className={styles.moveButtons}>
+                        <button
+                          type="button"
+                          onClick={() => handleMoveItem(index, 'up')}
+                          className={styles.moveButton}
+                          disabled={index === 0 || disabled}
+                          title="Move up"
+                        >
+                          ⬆️
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleMoveItem(index, 'down')}
+                          className={styles.moveButton}
+                          disabled={
+                            index === intendedOrder.length - 1 || disabled
+                          }
+                          title="Move down"
+                        >
+                          ⬇️
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
