@@ -56,8 +56,8 @@ export function PuzzleManager({ userName }: PuzzleManagerProps) {
   };
 
   const getTestingLink = (puzzle: RawDailyRiddleData) => {
-    // Base64 encode the question for the test parameter
-    const encodedQuestion = btoa(puzzle.question);
+    // Base64 encode the question for the test parameter (with Unicode support)
+    const encodedQuestion = btoa(encodeURIComponent(puzzle.question));
     return `#/?test=${encodedQuestion}&reset`;
   };
 

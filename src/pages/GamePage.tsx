@@ -241,8 +241,8 @@ export function GamePage() {
 
   if (isTestMode && testParam) {
     try {
-      // Decode the base64 question
-      const decodedQuestion = atob(testParam);
+      // Decode the base64 question (with Unicode support)
+      const decodedQuestion = decodeURIComponent(atob(testParam));
       // Find matching puzzle by question
       dailyRiddleData = allPuzzles.find(p => p.question === decodedQuestion);
 
