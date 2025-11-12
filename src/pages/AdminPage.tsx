@@ -2,10 +2,14 @@ import { useState } from 'react';
 
 import { PuzzleManager } from '../components/FirebaseTest/PuzzleManager';
 import { ToastProvider } from '../context/ToastContext';
+import { useFirebaseAuth } from '../hooks/useFirebaseAuth';
 
 import styles from './AdminPage.module.css';
 
 export function AdminPage() {
+  // Authenticate anonymously with Firebase
+  const { loading: authLoading } = useFirebaseAuth();
+
   const [userName, setUserName] = useState<string>('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -17,6 +21,26 @@ export function AdminPage() {
       setIsAuthenticated(true);
     }
   };
+
+  // Show loading while Firebase auth is in progress
+  if (authLoading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh',
+          textAlign: 'center',
+          padding: '2rem',
+        }}
+      >
+        <div>
+          <h2>Loading...</h2>
+        </div>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return (

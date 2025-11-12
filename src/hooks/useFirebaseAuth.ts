@@ -17,11 +17,12 @@ export function useFirebaseAuth() {
     const unsubscribe = onAuthStateChanged(
       auth,
       currentUser => {
-        setUser(currentUser);
-        setLoading(false);
-
-        // If no user, sign in anonymously
-        if (!currentUser) {
+        if (currentUser) {
+          // User is signed in, we can stop loading
+          setUser(currentUser);
+          setLoading(false);
+        } else {
+          // No user yet, sign in anonymously but keep loading=true
           signInAnonymously(auth).catch(err => {
             console.error('Error signing in anonymously:', err);
             setError(err.message);
