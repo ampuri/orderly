@@ -44,7 +44,7 @@ export async function getAllPuzzles(): Promise<RawDailyRiddleData[]> {
   }
 
   const puzzlesObj = snapshot.val() as Record<string, RawDailyRiddleData>;
-  return Object.values(puzzlesObj).sort((a, b) => a.day - b.day);
+  return Object.values(puzzlesObj).sort((a, b) => b.day - a.day);
 }
 
 /**
@@ -86,7 +86,7 @@ export async function addPuzzle(
 /**
  * Moves a puzzle up or down by swapping day numbers with adjacent puzzle
  * @param day - The day number of the puzzle to move
- * @param direction - 'up' to move earlier (decrease day), 'down' to move later (increase day)
+ * @param direction - 'up' to move up in the list, 'down' to move down in the list
  */
 export async function movePuzzle(
   day: number,
